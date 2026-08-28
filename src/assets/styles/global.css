@@ -1,0 +1,227 @@
+.tr {
+  transition: 300ms;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  transition: 300ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background-color: #000000;
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* SUBMIT BUTTON */
+.btn-submit,
+button[type="submit"],
+.submit-btn {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  transition: 300ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+.btn-submit:hover,
+button[type="submit"]:hover,
+.submit-btn:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+/* CANCEL BUTTON */
+.btn-cancel,
+.cancel-btn {
+  background-color: #dc2626;
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  transition: 300ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+.btn-cancel:hover,
+.cancel-btn:hover {
+  background-color: #b91c1c;
+}
+
+.input {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 12px 16px !important;
+  border-radius: 8px;
+  width: 100%;
+  background-color: #fff;
+}
+html.dark .input {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.input:focus {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+html.dark .input:focus {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 16px;
+}
+html.dark .card {
+  background-color: #242424;
+}
+
+/* SCROLLBAR */
+.restro_scrollbar::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+body::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html.dark body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.restro_scrollbar::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 10px;
+}
+
+.restro_scrollbar::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
+.restro_scrollbar_mini {
+  overflow-y: auto;
+}
+.restro_scrollbar_mini::-webkit-scrollbar {
+  width: 4px;
+}
+.restro_scrollbar_mini::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 10px;
+  width: 4px;
+}
+
+.restro_scrollbar_mini_white {
+  overflow-y: auto;
+}
+.restro_scrollbar_mini_white::-webkit-scrollbar {
+  width: 4px;
+}
+.restro_scrollbar_mini_white::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+.restro_scrollbar_mini_white::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 4px;
+  width: 4px;
+}
+.scroll-horizon {
+  overflow-x: auto;
+}
+.scroll-horizon::-webkit-scrollbar {
+  height: 4px;
+}
+.scroll-horizon::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+.scroll-horizon::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 4px;
+  height: 4px;
+}
+
+@media screen and (max-width: 640px) {
+  .card {
+    padding: 10px;
+  }
+}
+
+/* PROSE TABLE STYLES - For rich text content with tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  display: table;
+  table-layout: auto;
+}
+
+.prose table td,
+.prose table th {
+  border: 1px solid #e5e7eb;
+  padding: 0.75em;
+  text-align: left;
+  vertical-align: top;
+}
+
+html.dark .prose table td,
+html.dark .prose table th {
+  border-color: #374151;
+}
+
+.prose table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+html.dark .prose table th {
+  background-color: #1f2937;
+}
+
+.prose table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+html.dark .prose table tbody tr:nth-child(even) {
+  background-color: #1f2937;
+}
+
+.prose table colgroup col {
+  display: table-column;
+}
+
+.prose table tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+html.dark .prose table tbody tr:hover {
+  background-color: #374151;
+}

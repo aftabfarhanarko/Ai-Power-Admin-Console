@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Console SQA Report</title><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;background:#f9f9fb;color:#18181b;padding:32px 16px;}.container{max-width:900px;margin:0 auto;}h1{font-size:24px;font-weight:700;}table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;margin-bottom:32px;}th{background:#f4f4f8;text-align:left;padding:10px;}td{padding:10px;border-bottom:1px solid #f0f0f4;}tr.section-header td{background:#f9f9fb;font-weight:700;}tr.pass{color:#16a34a;}tr.fail{color:#dc2626;}tr.skip{color:#d97706;}.score{display:inline-block;background:#16a34a;color:#fff;padding:8px 16px;border-radius:8px;font-weight:bold;margin-bottom:20px;}</style></head><body><div class="container"><h1>⚡ Console SQA Report</h1><p style="margin-bottom:20px;color:#71717a;">2/28/2026, 5:54:30 PM</p><div class="score">Score: 100%</div><table><thead><tr><th></th><th>Test Name</th><th>Detail</th><th>Status</th></tr></thead><tbody><tr class="section-header"><td colspan="4">▸ Console — Unified Login Page</td></tr>
+<tr class="pass"><td>✓</td><td>Login page loads successfully</td><td>Title: "SquadCart Console"</td><td class="badge pass">PASS</td></tr>
+<tr class="pass"><td>✓</td><td>Login form is present on page</td><td>found <form> element</td><td class="badge pass">PASS</td></tr>
+<tr class="section-header"><td colspan="4">▸ Console — Superadmin Login Page</td></tr>
+<tr class="pass"><td>✓</td><td>Superadmin login route is active</td><td>https://console.squadcart.app/superadmin/login</td><td class="badge pass">PASS</td></tr>
+<tr class="section-header"><td colspan="4">▸ Console — Auth Redirection</td></tr>
+<tr class="pass"><td>✓</td><td>Unauthenticated user is redirected to login</td><td>https://console.squadcart.app/login</td><td class="badge pass">PASS</td></tr>
+<tr class="section-header"><td colspan="4">▸ Console — Performance & Assets</td></tr>
+<tr class="pass"><td>✓</td><td>Page loads within 10s</td><td>Load: 165ms</td><td class="badge pass">PASS</td></tr>
+<tr class="pass"><td>✓</td><td>No severe JS console errors on login</td><td>Console clean</td><td class="badge pass">PASS</td></tr>
+<tr class="section-header"><td colspan="4">▸ Console — Security</td></tr>
+<tr class="pass"><td>✓</td><td>Admin console runs on HTTPS</td><td>https://console.squadcart.app/login</td><td class="badge pass">PASS</td></tr></tbody></table></div></body></html>

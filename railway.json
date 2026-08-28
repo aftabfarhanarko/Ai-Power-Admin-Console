@@ -1,0 +1,11 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "watchPatterns": [
+      "apps/console/**",
+      "package.json",
+      "package-lock.json",
+      "yarn.lock"
+    ]
+  }
+}

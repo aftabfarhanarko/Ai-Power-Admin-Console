@@ -1,0 +1,348 @@
+@import url("https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+/* --- Default Global Font & Utility Classes --- */
+* {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 400;
+}
+
+.bai-jamjuree-extralight {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.bai-jamjuree-light {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.bai-jamjuree-regular {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bai-jamjuree-medium {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.bai-jamjuree-semibold {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.bai-jamjuree-bold {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.bai-jamjuree-extralight-italic {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.bai-jamjuree-light-italic {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.bai-jamjuree-regular-italic {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.bai-jamjuree-medium-italic {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.bai-jamjuree-semibold-italic {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.bai-jamjuree-bold-italic {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+
+    --background: #ffffff;
+    --foreground: #0F172A;
+    --surface: #F8FAFC;
+    --surface-hover: #F1F5F9;
+    --border-color: #E2E8F0;
+    --border-light: #F1F5F9;
+    --muted-text: #64748B;
+    --muted-dark: #94A3B8;
+
+    /* SquadCart Brand — Indigo unified palette */
+    --brand-primary: #6366F1;
+    --brand-primary-hover: #4F46E5;
+    --brand-primary-dim: rgba(99, 102, 241, 0.12);
+    --brand-primary-glow: rgba(99, 102, 241, 0.25);
+    --brand-secondary: #8B5CF6;
+    --brand-success: #10B981;
+    --brand-warning: #F59E0B;
+    --brand-danger: #EF4444;
+    --brand-cyan: #06B6D4;
+
+    /* Legacy green aliases (kept for backward compat) */
+    --primary-green: #6366F1;
+    --primary-green-dim: rgba(99, 102, 241, 0.12);
+    --primary-green-glow: rgba(99, 102, 241, 0.25);
+    --deep-green-start: #4F46E5;
+    --deep-green-end: #6366F1;
+
+    /* Dashboard tokens */
+    --widget-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px -1px rgba(0,0,0,0.07);
+    --widget-shadow-hover: 0 4px 12px rgba(0,0,0,0.09);
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --radius: 0.75rem;
+
+    --chart-1: 239 84% 67%;
+    --chart-2: 160 64% 39%;
+    --chart-3: 30 86% 57%;
+    --chart-4: 291 64% 62%;
+    --chart-5: 196 92% 45%;
+
+    /* Nexus brand colors (overridable by user custom color in Preferences) */
+    --nexus-primary: #6366F1;
+    --nexus-secondary: #8B5CF6;
+  }
+
+  .dark {
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 11%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+
+    --background: #0A0D14;
+    --foreground: #F1F5F9;
+    --surface: #111827;
+    --surface-hover: #1F2937;
+    --border-color: #1F2937;
+    --border-light: #111827;
+    --muted-text: #94A3B8;
+    --muted-dark: #64748B;
+
+    --brand-primary: #818CF8;
+    --brand-primary-dim: rgba(129, 140, 248, 0.15);
+    --brand-primary-glow: rgba(129, 140, 248, 0.3);
+
+    /* Legacy aliases */
+    --primary-green: #818CF8;
+    --primary-green-dim: rgba(129, 140, 248, 0.15);
+    --primary-green-glow: rgba(129, 140, 248, 0.3);
+    --deep-green-start: #4F46E5;
+    --deep-green-end: #818CF8;
+
+    --widget-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    --widget-shadow-hover: 0 4px 16px rgba(0,0,0,0.4);
+
+    --card: 216 19% 13%;
+    --card-foreground: 0 0% 98%;
+    --popover: 216 19% 13%;
+    --popover-foreground: 0 0% 98%;
+
+    --nexus-primary: #818CF8;
+    --nexus-secondary: #A78BFA;
+
+    --chart-1: 239 84% 75%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 86% 60%;
+    --chart-4: 280 65% 70%;
+    --chart-5: 196 92% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-gray-100 dark:bg-[#0b0f14] text-gray-900 dark:text-gray-100;
+    overflow-x: hidden;
+  }
+}
+
+.dark .card {
+  background-color: #1a1f26;
+}
+
+.password-input::-ms-reveal,
+.password-input::-ms-clear {
+  display: none;
+}
+
+/* Custom Login Page Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Login Card Animation */
+.card {
+  animation: scaleIn 0.4s ease-out;
+}
+
+/* Enhanced Hover Effects */
+.login-input-focus {
+  transition: all 0.3s ease;
+}
+
+.login-input-focus:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* refined scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+/* Button Hover Effect */
+.login-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.login-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+}
+
+.login-button:hover::before {
+  left: 100%;
+}

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  console:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: squadcart-console
+    restart: unless-stopped
+    ports:
+      - "4173:4173"
+    environment:
+      - NODE_ENV=development
+      # Connect to the local backend running on host 8000 via docker network or host.docker.internal
+      - VITE_API_URL=http://localhost:8000
+    env_file:
+      - .env
+    # To run dev server directly with hot reloading:
+    # command: npm run dev -- --host 0.0.0.0
+    # ports:
+    #   - "5173:5173"

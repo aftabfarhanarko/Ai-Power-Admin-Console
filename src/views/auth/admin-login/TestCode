@@ -1,0 +1,311 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+
+// components
+import SubmitButton from "@/components/buttons/SubmitButton";
+import TextField from "@/components/input/TextField";
+
+// hooks and function
+import { useLoginSystemuserMutation } from "@/features/systemuser/systemuserApiSlice";
+import { useSuperadminLoginMutation } from "@/features/superadminAuth/superadminAuthApiSlice";
+import { userLoggedIn } from "@/features/auth/authSlice";
+import { superadminLoggedIn } from "@/features/superadminAuth/superadminAuthSlice";
+import { decodeJWT } from "@/utils/jwt-decoder";
+
+// icons
+import { bolt } from "@/assets/icons/svgIcons";
+
+const MockDashboard = () => {
+  return (
+    <div className="w-80 bg-white/95 backdrop-blur-md rounded-[32px] p-6 shadow-2xl font-sans relative overflow-hidden transform rotate-[-5deg] hover:rotate-0 transition-transform duration-500">
+      {/* Logo/Icon */}
+      <div className="mb-8">
+        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+          {bolt}
+        </div>
+      </div>
+
+      {/* Balance */}
+      <div className="mb-10">
+        <h3 className="text-3xl font-bold text-slate-900 mb-1">12,347.23 $</h3>
+        <p className="text-slate-400 text-sm font-medium">Combined balance</p>
+      </div>
+
+      {/* Card Info */}
+      <div className="flex items-end justify-between mb-8">
+        <div>
+          <p className="text-xs font-bold text-slate-900 mb-1">Primary Card</p>
+          <p className="text-slate-400 text-sm tracking-wider font-medium">
+            3495 **** **** 6917
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-lg font-bold text-slate-900">2,546.64$</p>
+        </div>
+      </div>
+
+      {/* Bottom Actions */}
+      <div className="flex items-center justify-between pt-2">
+        <span className="font-bold text-slate-300 italic text-xl">VISA</span>
+        <button className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-bold transition-colors">
+          View All
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const AdminLoginPage = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { handleSubmit, register } = useForm();
+
+  const [loginSystemuser, { isLoading: loginLoading }] =
+    useLoginSystemuserMutation();
+  const [superadminLogin, { isLoading: superadminLoading }] =
+    useSuperadminLoginMutation();
+
+  const isLoading = loginLoading || superadminLoading;
+
+  const onSubmit = async (data) => {
+    try {
+      const loginCredential = data.email || data.name;
+
+      if (!data.password) {
+        toast.error(t("auth.passwordRequired"));
+        return;
+      }
+
+      // 1st: Try systemuser login (uses email)
+      const loginRes = await loginSystemuser({
+        email: loginCredential,
+        password: data.password,
+      });
+
+      if (loginRes?.data) {
+        const responseData = loginRes.data;
+        const accessToken =
+          responseData?.accessToken || responseData?.data?.accessToken;
+        const refreshToken =
+          responseData?.refreshToken || responseData?.data?.refreshToken;
+
+        if (accessToken) {
+          const { payload } = decodeJWT(accessToken);
+          const userRole = payload.role || responseData?.user?.role;
+
+          if (userRole === "SYSTEM_OWNER" || userRole === "EMPLOYEE") {
+            dispatch(
+              userLoggedIn({ accessToken, refreshToken, rememberMe: false }),
+            );
+            toast.success(t("auth.adminLoginSuccess"));
+            navigate("/");
+            return;
+          }
+        }
+      }
+
+      // 2nd: Try superadmin login if systemuser failed
+      const superadminResult = await superadminLogin({
+        email: loginCredential,
+        password: data.password,
+      }).unwrap();
+
+      let accessToken = null;
+      let refreshToken = null;
+      let user = null;
+
+      if (superadminResult?.accessToken) {
+        accessToken = superadminResult.accessToken;
+        refreshToken = superadminResult.refreshToken || null;
+        user = superadminResult.user || null;
+      }
+
+      if (accessToken) {
+        const { payload } = decodeJWT(accessToken);
+
+        if (payload.role === "SUPER_ADMIN") {
+          // Save superadmin auth state & tokens
+          dispatch(
+            superadminLoggedIn({
+              accessToken,
+              refreshToken,
+              user,
+            }),
+          );
+          toast.success(t("auth.superadminLoginSuccess"));
+          navigate("/superadmin");
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error(error?.data?.message || t("auth.loginFailedGeneric"));
+    }
+  };
+
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 p-4 sm:p-6 lg:p-8 font-sans">
+      <div className="w-full max-w-[1400px] min-h-[800px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+        {/* Left Side - Form */}
+        <div className="w-full lg:w-1/2 p-8 sm:p-12 lg:p-20 flex flex-col justify-center relative z-10">
+          <div className="max-w-md mx-auto w-full">
+            {/* Logo */}
+            <div className="mb-10">
+              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-200">
+                {bolt}
+              </div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-10"
+            >
+              <h1 className="text-3xl font-bold text-slate-900 mb-3">
+                Get Started
+              </h1>
+              <p className="text-slate-500 text-lg">
+                Welcome to SquadCart - Let's create your account
+              </p>
+            </motion.div>
+
+            <motion.form
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-6"
+            >
+              <TextField
+                label={t("auth.emailOrUsername")}
+                placeholder="rafiqur@company.com"
+                register={register}
+                name="email"
+                disabled={isLoading}
+                inputClassName="bg-white border-slate-200 focus:border-indigo-500 rounded-xl h-12"
+              />
+
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-medium text-slate-700">
+                    {t("auth.passwordLabel")}
+                  </label>
+                  <a
+                    href="/forgot-password"
+                    className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+                  >
+                    Forgot?
+                  </a>
+                </div>
+                <TextField
+                  type="password"
+                  placeholder="min 8 chars"
+                  register={register}
+                  name="password"
+                  disabled={isLoading}
+                  inputClassName="bg-white border-slate-200 focus:border-indigo-500 rounded-xl h-12"
+                />
+              </div>
+
+              <SubmitButton
+                isLoading={isLoading}
+                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white text-base font-semibold rounded-xl shadow-lg shadow-indigo-200 transition-all mt-6"
+              >
+                {isLoading ? t("auth.signingIn") : "Sign in"}
+              </SubmitButton>
+
+              <div className="mt-8 text-center text-sm text-slate-500">
+                Don't have an account?{" "}
+                <a
+                  href="#"
+                  className="font-medium text-indigo-600 hover:underline"
+                >
+                  Sign up
+                </a>
+              </div>
+            </motion.form>
+          </div>
+        </div>
+
+        {/* Right Side - Visual */}
+        <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-16 overflow-hidden bg-slate-900">
+          {/* Text Content */}
+          <div className="relative z-10 w-full max-w-lg mt-10">
+            <h2 className="text-6xl font-serif text-white leading-tight">
+              Enter <br />
+              <span className="italic font-light">the Future</span> <br />
+              of Payments, <br />
+              today
+            </h2>
+          </div>
+
+          {/* Floating Elements */}
+          <div className="relative z-10 flex items-end justify-end translate-x-8 translate-y-8">
+            {/* Side Floating Icons */}
+            <div className="absolute bottom-20 right-[340px] z-10 flex flex-col gap-4">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg text-indigo-600 transform hover:scale-110 transition-transform">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+              </div>
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white transform hover:scale-110 transition-transform">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="19" cy="12" r="1" />
+                  <circle cx="5" cy="12" r="1" />
+                </svg>
+              </div>
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white transform hover:scale-110 transition-transform">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Main Card */}
+            <MockDashboard />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminLoginPage;

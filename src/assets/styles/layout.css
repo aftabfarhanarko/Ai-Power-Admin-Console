@@ -1,0 +1,33 @@
+.fl {
+  display: flex;
+  align-items: center;
+}
+
+.flcx {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flbx {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flby {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.flcy {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

@@ -1,0 +1,76 @@
+{
+  "name": "@veriff/js-sdk",
+  "version": "1.5.1",
+  "description": "JavaScript SDK for Veriff identity verification",
+  "main": "lib/veriff.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "webpack --config webpack/webpack.config.js --mode production",
+    "dev": "webpack --progress --mode=development --watch --config webpack/webpack.config.js",
+    "test": "jest",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "eslint --ext=js,ts src"
+  },
+  "author": "Ilia Aphtsiauri <ilia@veriff.me> (https://github.com/iaptsiauri)",
+  "contributors": [
+    "Maksim Kitsigin <maksim.kitsigin@veriff.com> (https://github.com/fixmk)"
+  ],
+  "keywords": [
+    "veriff",
+    "sdk",
+    "online",
+    "identity",
+    "verification"
+  ],
+  "jest": {
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testEnvironment": "jsdom",
+    "testRegex": "(/__test__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|ts?)$"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "semi": true,
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "endOfLine": "lf"
+  },
+  "engines": {
+    "node": ">=16",
+    "npm": ">=8"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^27.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.5",
+    "babel-plugin-add-module-exports": "^1.0.4",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.3.6",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-loader": "^4.0.2",
+    "jasmine-core": "^4.1.0",
+    "jest": "^28.0.3",
+    "jest-environment-jsdom": "^28.0.2",
+    "prettier": "^2.6.2",
+    "sinon": "^13.0.2",
+    "source-map-loader": "^3.0.1",
+    "style-loader": "^3.3.1",
+    "ts-jest": "^28.0.1",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.6.4",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
+  }
+}
