@@ -84,22 +84,22 @@ const SuperAdminOverviewPage = () => {
     >
       <div className="grid grid-cols-12 gap-6">
         {/* Hero Section: Welcome (9-Span) */}
-        <section className="col-span-12 lg:col-span-9 bg-white dark:bg-[#1a1f26] rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-gray-800/40 flex flex-col md:flex-row justify-between items-center relative overflow-hidden group">
-          <div className="relative z-10 flex flex-col gap-4 max-w-xl">
+        <section className="col-span-12 lg:col-span-9 bg-white dark:bg-[#1a1f26] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800/40 flex flex-col md:flex-row justify-between items-center relative overflow-hidden group">
+          <div className="relative z-10 flex flex-col gap-3 max-w-xl">
             <div className="flex flex-col">
-              <h3 className="text-4xl md:text-5xl font-extrabold text-[#1b1b24] dark:text-white leading-none">Welcome back,</h3>
-              <h4 className="text-4xl md:text-5xl font-extrabold text-[#3525cd] dark:text-[#c3c0ff] leading-none mt-1">Commander SquadCart</h4>
+              <h3 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white leading-none">Welcome back,</h3>
+              <h4 className="text-2xl md:text-3xl font-extrabold text-[#3525cd] dark:text-[#c3c0ff] leading-none mt-1">Commander SquadCart</h4>
             </div>
-            <p className="text-base md:text-lg text-[#464555] dark:text-gray-400">
+            <p className="text-sm md:text-base text-[#464555] dark:text-gray-400">
               Engine status nominal. Your revenue metrics are outperforming last quarter by <span className="text-[#10b981] font-bold">12.4%</span>.
             </p>
           </div>
           
           {/* Hero Metric Badge */}
-          <div className="mt-6 md:mt-0 relative z-10 bg-[#1a1c1e] dark:bg-black/50 p-8 rounded-2xl text-white min-w-[240px] shadow-xl">
+          <div className="mt-6 md:mt-0 relative z-10 bg-[#1a1c1e] dark:bg-black/50 p-6 rounded-2xl text-white min-w-[220px] shadow-xl">
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#777587]">Total System Value</span>
             <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-3xl font-black">{summary.totalValue}</span>
+              <span className="text-2xl font-black">{summary.totalValue}</span>
             </div>
             <div className="flex items-center gap-1 mt-2 text-[#10b981] font-semibold text-sm">
               <MaterialIcon className="text-sm">trending_up</MaterialIcon>
@@ -112,18 +112,18 @@ const SuperAdminOverviewPage = () => {
         </section>
 
         {/* Metric Card 1: Earnings (3-Span) */}
-        <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white dark:bg-[#1a1f26] p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800/40 hover:-translate-y-1 transition-all duration-300">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-[#e2dfff] text-[#3525cd] rounded-xl flex items-center justify-center">
-              <MaterialIcon className="text-2xl">payments</MaterialIcon>
+        <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white dark:bg-[#1a1f26] p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800/40 hover:-translate-y-1 transition-all duration-300">
+          <div className="flex justify-between items-start mb-2">
+            <div className="p-2.5 bg-[#e2dfff] text-[#3525cd] rounded-xl flex items-center justify-center">
+              <MaterialIcon className="text-xl">payments</MaterialIcon>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[#777587]">Earnings</p>
               <p className="text-xs font-bold text-[#10b981]">Live Feed</p>
             </div>
           </div>
-          <div className="mt-8">
-            <h5 className="text-4xl font-extrabold text-[#1b1b24] dark:text-white leading-none">{summary.earnings}</h5>
+          <div className="mt-4">
+            <h5 className="text-2xl font-extrabold text-[#1b1b24] dark:text-white leading-none">{summary.earnings}</h5>
           </div>
           <div className="mt-6 h-12 w-full flex items-end gap-1 opacity-20">
             <div className="bg-[#3525cd] flex-1 h-1/4 rounded-full"></div>
@@ -136,18 +136,18 @@ const SuperAdminOverviewPage = () => {
         </div>
 
         {/* Metric Card 2: Active Base (3-Span) */}
-        <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white dark:bg-[#1a1f26] p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800/40 hover:-translate-y-1 transition-all duration-300">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-[#f0ecf9] dark:bg-gray-800 text-[#464555] dark:text-gray-300 rounded-xl flex items-center justify-center">
-              <MaterialIcon className="text-2xl">groups</MaterialIcon>
+        <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white dark:bg-[#1a1f26] p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800/40 hover:-translate-y-1 transition-all duration-300">
+          <div className="flex justify-between items-start mb-2">
+            <div className="p-2.5 bg-[#f0ecf9] dark:bg-gray-800 text-[#464555] dark:text-gray-300 rounded-xl flex items-center justify-center">
+              <MaterialIcon className="text-xl">groups</MaterialIcon>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[#777587]">Active Base</p>
               <p className="text-xs font-bold text-[#3525cd] dark:text-[#c3c0ff]">Verified</p>
             </div>
           </div>
-          <div className="mt-8">
-            <h5 className="text-4xl font-extrabold text-[#1b1b24] dark:text-white leading-none">{summary.customers}</h5>
+          <div className="mt-4">
+            <h5 className="text-2xl font-extrabold text-[#1b1b24] dark:text-white leading-none">{summary.customers}</h5>
           </div>
           <div className="mt-6 h-12 w-full flex items-end gap-1 opacity-20">
             <div className="bg-gray-700 dark:bg-gray-300 flex-1 h-2/4 rounded-full"></div>
@@ -160,18 +160,18 @@ const SuperAdminOverviewPage = () => {
         </div>
 
         {/* Metric Card 3: Queue (3-Span) */}
-        <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white dark:bg-[#1a1f26] p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800/40 hover:-translate-y-1 transition-all duration-300">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-[#ffdad6] text-[#ef4444] rounded-xl flex items-center justify-center">
-              <MaterialIcon className="text-2xl">timer</MaterialIcon>
+        <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white dark:bg-[#1a1f26] p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800/40 hover:-translate-y-1 transition-all duration-300">
+          <div className="flex justify-between items-start mb-2">
+            <div className="p-2.5 bg-[#ffdad6] text-[#ef4444] rounded-xl flex items-center justify-center">
+              <MaterialIcon className="text-xl">timer</MaterialIcon>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[#777587]">Queue</p>
               <p className="text-xs font-bold text-[#ef4444]">Urgent</p>
             </div>
           </div>
-          <div className="mt-8">
-            <h5 className="text-4xl font-extrabold text-[#1b1b24] dark:text-white leading-none">{summary.tickets}</h5>
+          <div className="mt-4">
+            <h5 className="text-2xl font-extrabold text-[#1b1b24] dark:text-white leading-none">{summary.tickets}</h5>
           </div>
           <div className="mt-6 h-12 w-full flex items-end gap-1 opacity-20">
             <div className="bg-[#ef4444] flex-1 h-1/4 rounded-full"></div>

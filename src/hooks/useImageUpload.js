@@ -41,14 +41,52 @@ const useImageUpload = () => {
     setError(null);
 
     try {
-      // Create FormData with file
+      const imgbbKey =
+        process.env.VITE_IMGBB_API_KEY ||
+        import.meta.env?.VITE_IMGBB_API_KEY ||
+        "a6c948ab64f7987bbf9e5477cde3a1cb";
+
+      // If ImgBB API Key is available, upload to ImgBB directly
+      if (imgbbKey) {
+        try {
+          const formData = new FormData();
+          formData.append("image", file);
+
+          const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`, {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.success && data.data?.url) {
+            toast.success("Image uploaded successfully");
+            return data.data.url;
+          }
+        } catch (imgbbErr) {
+          console.warn("ImgBB API error, using Data URL fallback:", imgbbErr);
+        }
+      }
+
+      // Base64 Data URL fallback for standalone client image rendering
+      const base64Url = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+
+      if (base64Url) {
+        toast.success("Image uploaded successfully");
+        return base64Url;
+      }
+
+      // Fallback: Upload to backend server
       const formData = new FormData();
       formData.append("file", file);
 
-      // Get auth token
       const { accessToken } = getTokens();
 
-      // Upload to backend server
       const response = await fetch(`${API_BASE_URL}/upload/image`, {
         method: "POST",
         headers: {
@@ -61,7 +99,6 @@ const useImageUpload = () => {
       try {
         errorData = await response.json();
       } catch (e) {
-        // If response is not JSON, use status text
         errorData = { message: response.statusText };
       }
 

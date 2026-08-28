@@ -19,25 +19,17 @@ const useAuth = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       setAuthChecked(true);
-      // Reset document title when not authenticated
       document.title = APP_TITLE;
       return;
     }
 
-    // Show loading state while fetching user data
-    if (isLoading) {
-      document.title = `Loading... - ${APP_TITLE}`;
-      return;
+    if (!isLoading) {
+      setAuthChecked(true);
     }
 
-    // Set authChecked to true when authenticated
-    setAuthChecked(true);
-
     if (isSuccess && data) {
-      // Store user details in Redux
       dispatch(userDetailsFetched(data));
       
-      // Update document title with company name and company ID from API
       const companyName = data.companyName || APP_TITLE;
       const companyId = data.companyId || "";
       
@@ -47,7 +39,6 @@ const useAuth = () => {
         document.title = `${companyName} - ${APP_TITLE}`;
       }
     } else if (isError) {
-      // Clear token and redirect to login if profile fetch fails
       dispatch(userLoggedOut());
     }
   }, [
@@ -60,8 +51,8 @@ const useAuth = () => {
   ]);
 
   return {
-    isLoading: isLoading || (isAuthenticated && !authChecked),
-    authChecked,
+    isLoading,
+    authChecked: !isAuthenticated || authChecked,
     refetchProfile: refetch,
   };
 };

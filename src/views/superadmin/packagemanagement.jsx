@@ -136,11 +136,11 @@ const PackageManagementPage = () => {
       <section className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
         <div>
           <div className="mb-2 flex items-center gap-2">
-            <span className="text-[12px] font-semibold tracking-[0.05em] text-[#3525cd] uppercase">System Assets</span>
+            <span className="text-[12px] font-semibold tracking-[0.05em] text-[#777587] uppercase font-mono">Infrastructure</span>
             <span className="text-[#777587]">/</span>
             <span className="text-[12px] font-semibold tracking-[0.05em] text-[#464555] uppercase font-mono">Deployment Plans</span>
           </div>
-          <h1 className="text-[32px] md:text-[48px] font-extrabold tracking-[-0.02em] text-[#1b1b24] leading-tight">
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-[-0.02em] text-[#1b1b24] leading-tight">
             Package Management
           </h1>
         </div>
@@ -167,7 +167,7 @@ const PackageManagementPage = () => {
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#eae6f4] hover:translate-y-[-2px] transition-transform duration-300 flex items-center justify-between">
           <div>
             <p className="text-[12px] font-semibold text-[#777587] mb-1">Fleet Health</p>
-            <h3 className="text-[32px] font-bold text-[#1b1b24]">98.4%</h3>
+            <h3 className="text-2xl font-bold text-[#1b1b24]">98.4%</h3>
             <div className="mt-2 flex items-center gap-1 text-[#10b981]">
               <span className="material-symbols-outlined !text-[16px]">trending_up</span>
               <span className="text-[12px] font-bold">+2.1%</span>
@@ -187,7 +187,7 @@ const PackageManagementPage = () => {
         {/* Card 2: Success Rate */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#eae6f4] hover:translate-y-[-2px] transition-transform duration-300">
           <p className="text-[12px] font-semibold text-[#777587] mb-1">Success Rate</p>
-          <h3 className="text-[32px] font-bold text-[#1b1b24]">99.2%</h3>
+          <h3 className="text-2xl font-bold text-[#1b1b24]">99.2%</h3>
           <div className="mt-4 flex items-end gap-2">
             <div className="flex gap-1 h-8 items-end">
               <div className="w-1.5 bg-[#e2dfff] h-[40%] rounded-full"></div>
@@ -204,7 +204,7 @@ const PackageManagementPage = () => {
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#eae6f4] hover:translate-y-[-2px] transition-transform duration-300">
           <p className="text-[12px] font-semibold text-[#777587] mb-1">Avg. Deployment Time</p>
           <div className="flex items-baseline gap-2">
-            <h3 className="text-[32px] font-bold text-[#1b1b24]">1m 24s</h3>
+            <h3 className="text-2xl font-bold text-[#1b1b24]">1m 24s</h3>
             <span className="text-[10px] font-bold bg-[#ffdad6] text-[#ef4444] px-2 py-0.5 rounded-full">-12s</span>
           </div>
           <div className="mt-4 h-8 w-full">
@@ -219,7 +219,7 @@ const PackageManagementPage = () => {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-[12px] font-semibold opacity-80 mb-1">Active Nodes</p>
-              <h3 className="text-[32px] font-bold">{stats.active + 1388}</h3>
+              <h3 className="text-2xl font-bold">{stats.active + 1388}</h3>
             </div>
             <div className="p-2 bg-white/20 rounded-xl">
               <span className="material-symbols-outlined !text-[24px]">hub</span>

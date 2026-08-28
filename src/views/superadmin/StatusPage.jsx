@@ -202,8 +202,8 @@ export default function StatusPage() {
         .si-ms { font-family: 'Material Symbols Outlined', sans-serif; font-size: 20px; font-weight: 300; }
         .si-stat-badge { font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 4px; letter-spacing: .04em; }
         .si-stat-label { font-size: 10px; font-weight: 700; color: #777587; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px; }
-        .si-stat-value { font-size: 42px; font-weight: 800; color: #1b1b24; line-height: 1; letter-spacing: -.02em; }
-        .si-stat-unit { font-size: 18px; font-weight: 600; color: #777587; }
+        .si-stat-value { font-size: 26px; font-weight: 800; color: #1b1b24; line-height: 1; letter-spacing: -.02em; }
+        .si-stat-unit { font-size: 14px; font-weight: 600; color: #777587; }
         .si-mini-bars { display: flex; align-items: flex-end; gap: 3px; height: 32px; margin-top: 16px; }
         .si-mini-bar { width: 4px; border-radius: 99px; }
         .si-progress { height: 8px; background: #f0ecf9; border-radius: 999px; overflow: hidden; margin-top: 16px; }

@@ -9,11 +9,8 @@ const SuperAdminPrivateRoute = ({ children, redirectTo = "/login" }) => {
     (state) => state.superadminAuth,
   );
   
-  console.log("[SuperAdminPrivateRoute] Initial State - isAuthenticated:", isAuthenticated);
-
   // Check if user is authenticated
   if (!isAuthenticated) {
-    console.log("[SuperAdminPrivateRoute] Not authenticated, redirecting to", redirectTo);
     return <Navigate state={{ from: location }} to={redirectTo} replace />;
   }
 

@@ -52,13 +52,44 @@ const App = () => {
           position="top-right"
           toastOptions={{
             style: {
-              borderRadius: "8px",
-              background: "#222",
-              color: "#eee",
-              fontSize: "14px",
-              padding: "16px",
-              border: "1px solid #333",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              borderRadius: "16px",
+              background: "#ffffff",
+              color: "#000000",
+              fontSize: "16px",
+              fontWeight: "700",
+              padding: "16px 24px",
+              minWidth: "360px",
+              border: "1px solid #eae6f4",
+              boxShadow: "0 10px 25px -5px rgba(53, 37, 205, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
+            },
+            success: {
+              duration: 4000,
+              iconTheme: {
+                primary: "#10b981",
+                secondary: "#ffffff",
+              },
+              style: {
+                borderLeft: "5px solid #10b981",
+              },
+            },
+            error: {
+              duration: 5000,
+              iconTheme: {
+                primary: "#ef4444",
+                secondary: "#ffffff",
+              },
+              style: {
+                borderLeft: "5px solid #ef4444",
+              },
+            },
+            loading: {
+              iconTheme: {
+                primary: "#3525cd",
+                secondary: "#e2dfff",
+              },
+              style: {
+                borderLeft: "5px solid #3525cd",
+              },
             },
           }}
         />

@@ -27,6 +27,7 @@ const nextConfig = {
     VITE_STEADFAST_SECRET_KEY: process.env.VITE_STEADFAST_SECRET_KEY,
     VITE_PATHAO_CLIENT_ID: process.env.VITE_PATHAO_CLIENT_ID,
     VITE_PATHAO_CLIENT_SECRET: process.env.VITE_PATHAO_CLIENT_SECRET,
+    VITE_IMGBB_API_KEY: process.env.VITE_IMGBB_API_KEY,
   },
   async rewrites() {
     const isDev = process.env.NODE_ENV !== 'production';

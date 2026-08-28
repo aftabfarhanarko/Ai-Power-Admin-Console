@@ -169,10 +169,10 @@ const SuperAdminSupportPage = () => {
             <span className="material-symbols-outlined text-[14px] text-[#777587]">chevron_right</span>
             <span className="text-[12px] font-semibold tracking-[0.05em] text-[#464555] uppercase">Support Monitoring</span>
           </nav>
-          <h3 className="text-[32px] md:text-[48px] font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">
+          <h3 className="text-2xl md:text-3xl font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">
             Support Operations Overview
           </h3>
-          <p className="text-[16px] text-[#777587] mt-1 max-w-2xl font-normal leading-relaxed">
+          <p className="text-sm text-[#777587] mt-1 max-w-2xl font-normal leading-relaxed">
             Coordinating volume across 24 regional centers and coordinating 12,000+ active sessions.
           </p>
         </div>
@@ -201,7 +201,7 @@ const SuperAdminSupportPage = () => {
             </span>
           </div>
           <p className="text-[#777587] text-[12px] font-semibold tracking-[0.05em] uppercase mb-1">Total Tickets</p>
-          <h4 className="text-[32px] font-semibold tracking-[-0.01em] text-[#1b1b24]">{statsCounts.total}</h4>
+          <h4 className="text-2xl font-semibold tracking-[-0.01em] text-[#1b1b24]">{statsCounts.total}</h4>
           <div className="mt-4 h-1 w-full bg-[#f0ecf9] rounded-full overflow-hidden">
             <div className="h-full bg-[#3525cd]" style={{ width: "75%" }}></div>
           </div>
@@ -218,7 +218,7 @@ const SuperAdminSupportPage = () => {
             </span>
           </div>
           <p className="text-[#777587] text-[12px] font-semibold tracking-[0.05em] uppercase mb-1">Pending Review</p>
-          <h4 className="text-[32px] font-semibold tracking-[-0.01em] text-[#1b1b24]">{statsCounts.pending}</h4>
+          <h4 className="text-2xl font-semibold tracking-[-0.01em] text-[#1b1b24]">{statsCounts.pending}</h4>
           <div className="mt-4 h-1 w-full bg-[#f0ecf9] rounded-full overflow-hidden">
             <div className="h-full bg-[#f59e0b]" style={{ width: "25%" }}></div>
           </div>
@@ -235,7 +235,7 @@ const SuperAdminSupportPage = () => {
             </span>
           </div>
           <p className="text-[#777587] text-[12px] font-semibold tracking-[0.05em] uppercase mb-1">Resolved Today</p>
-          <h4 className="text-[32px] font-semibold tracking-[-0.01em] text-[#1b1b24]">{statsCounts.resolved}</h4>
+          <h4 className="text-2xl font-semibold tracking-[-0.01em] text-[#1b1b24]">{statsCounts.resolved}</h4>
           <div className="mt-4 h-1 w-full bg-[#f0ecf9] rounded-full overflow-hidden">
             <div className="h-full bg-[#10b981]" style={{ width: "85%" }}></div>
           </div>

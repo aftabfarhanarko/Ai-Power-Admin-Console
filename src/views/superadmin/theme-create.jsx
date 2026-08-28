@@ -16,7 +16,6 @@ import useImageUpload from "@/hooks/useImageUpload";
 const schema = yup.object().shape({
   domainUrl: yup
     .string()
-    .url("Please enter a valid URL")
     .nullable()
     .transform((value, originalValue) => (originalValue === "" ? null : value)),
   logo: yup.string().nullable(),
@@ -116,13 +115,17 @@ const ThemeCreatePage = () => {
     if (logoFile) {
       logoUrl = await uploadImage(logoFile);
       if (!logoUrl) {
-        toast.error("Failed to upload logo");
         return;
       }
     }
 
+    let formattedDomain = data.domainUrl ? data.domainUrl.trim() : "";
+    if (formattedDomain && !formattedDomain.startsWith("http://") && !formattedDomain.startsWith("https://")) {
+      formattedDomain = `https://${formattedDomain}`;
+    }
+
     const payload = {
-      ...(data.domainUrl && { domainUrl: data.domainUrl }),
+      ...(formattedDomain && { domainUrl: formattedDomain }),
       ...(logoUrl && { logo: logoUrl }),
       ...(data.primaryColorCode && { primaryColorCode: data.primaryColorCode }),
       ...(data.secondaryColorCode && {
@@ -171,8 +174,8 @@ const ThemeCreatePage = () => {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h2 className="text-[32px] md:text-[48px] font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">Create New Theme</h2>
-              <p className="text-[#777587] mt-1">Configure your brand assets and international interface colors.</p>
+              <h2 className="text-2xl md:text-3xl font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">Create New Theme</h2>
+              <p className="text-sm text-[#777587] mt-1">Configure your brand assets and international interface colors.</p>
             </div>
           </div>
         </div>
@@ -489,7 +492,7 @@ const ThemeCreatePage = () => {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[12px] font-semibold text-[#777587] uppercase tracking-wider">Preview Engine</p>
-                <div className="text-[56px] font-extrabold text-[#1b1b24] tracking-tight leading-none mt-2">
+                <div className="text-3xl font-extrabold text-[#1b1b24] tracking-tight leading-none mt-2">
                   {previewEngineScore}%
                 </div>
               </div>

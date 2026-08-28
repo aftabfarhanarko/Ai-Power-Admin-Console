@@ -90,10 +90,10 @@ const SuperAdminSupportCreatePage = () => {
               <ArrowLeft className="h-5 w-5 text-[#1b1b24]" />
             </Button>
             <div>
-              <h3 className="text-[32px] md:text-[40px] font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">
+              <h3 className="text-2xl md:text-3xl font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">
                 Create Support Ticket
               </h3>
-              <p className="text-[16px] text-[#777587] mt-1 max-w-2xl font-normal leading-relaxed">
+              <p className="text-sm text-[#777587] mt-1 max-w-2xl font-normal leading-relaxed">
                 Manually record or dispatch a merchant inquiry into the active support nexus.
               </p>
             </div>

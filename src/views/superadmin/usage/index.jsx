@@ -413,7 +413,7 @@ const Usage = () => {
                 <MaterialIcon className="text-[18px]">verified</MaterialIcon>
                 <span className="text-[10px] font-bold uppercase tracking-wider">SYSTEM STATUS: OPTIMAL</span>
               </div>
-              <h2 className="text-[32px] font-bold tracking-tight text-[#1b1b24] leading-tight">
+              <h2 className="text-xl md:text-2xl font-bold tracking-tight text-[#1b1b24] leading-tight">
                 System Monitoring
               </h2>
             </div>
@@ -508,10 +508,10 @@ const Usage = () => {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <p className="text-[10px] font-bold text-[#777587] uppercase tracking-widest">PLAN COMPLIANCE</p>
-                    <h4 className="text-[48px] font-black tracking-tight text-[#1b1b24] mt-2">92%</h4>
+                    <h4 className="text-2xl md:text-3xl font-black tracking-tight text-[#1b1b24] mt-1">92%</h4>
                   </div>
-                  <div className="w-12 h-12 bg-[#10b981]/15 text-[#10b981] rounded-2xl flex items-center justify-center">
-                    <MaterialIcon className="text-2xl" filled={true}>verified</MaterialIcon>
+                  <div className="w-10 h-10 bg-[#10b981]/15 text-[#10b981] rounded-2xl flex items-center justify-center">
+                    <MaterialIcon className="text-xl" filled={true}>verified</MaterialIcon>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -531,10 +531,10 @@ const Usage = () => {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <p className="text-[10px] font-bold text-[#777587] uppercase tracking-widest">STORAGE LATENCY</p>
-                    <h4 className="text-[48px] font-black tracking-tight text-[#1b1b24] mt-2">24.5<span className="text-2xl font-normal text-[#777587]">ms</span></h4>
+                    <h4 className="text-2xl md:text-3xl font-black tracking-tight text-[#1b1b24] mt-1">24.5<span className="text-lg font-normal text-[#777587]">ms</span></h4>
                   </div>
-                  <div className="w-12 h-12 bg-[#ef4444]/15 text-[#ef4444] rounded-2xl flex items-center justify-center">
-                    <MaterialIcon className="text-2xl" filled={true}>speed</MaterialIcon>
+                  <div className="w-10 h-10 bg-[#ef4444]/15 text-[#ef4444] rounded-2xl flex items-center justify-center">
+                    <MaterialIcon className="text-xl" filled={true}>speed</MaterialIcon>
                   </div>
                 </div>
                 <div className="space-y-2">

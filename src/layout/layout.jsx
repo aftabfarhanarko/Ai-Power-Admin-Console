@@ -22,7 +22,10 @@ const Layout = () => {
   // Also handle superadmin redirection if they land in merchant layout
   React.useEffect(() => {
     const isImpersonating = typeof window !== 'undefined' && sessionStorage.getItem("isImpersonating") === "true";
-    if (isSuperAdmin && !isImpersonating) {
+    const sessionSuperadminToken = typeof window !== 'undefined' && sessionStorage.getItem("superadmin_accessToken");
+    
+    // Only redirect if superadmin token actually exists in session and user is not impersonating
+    if (isSuperAdmin && sessionSuperadminToken && !isImpersonating) {
       navigate("/superadmin", { replace: true });
       return;
     }
@@ -76,6 +79,7 @@ const Layout = () => {
             </div>
           </div>
         )}
+        </div>
       </div>
     </main>
   );

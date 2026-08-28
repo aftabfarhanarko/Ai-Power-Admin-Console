@@ -120,6 +120,7 @@ const SuperAdminLoginPage = () => {
               <input
                 id="email"
                 type="email"
+                autoComplete="username email"
                 {...register("email", { required: true })}
                 placeholder="superadmin@squadcart.com"
                 className={`w-full px-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] text-[var(--foreground)] placeholder-[var(--muted-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]/50 focus:border-[var(--primary-green)] transition-all ${errors.email ? 'border-red-500' : ''}`}
@@ -138,6 +139,7 @@ const SuperAdminLoginPage = () => {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
                   {...register("password", { required: true })}
                   placeholder="••••••••"
                   className={`w-full px-4 py-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] text-[var(--foreground)] placeholder-[var(--muted-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]/50 focus:border-[var(--primary-green)] transition-all ${errors.password ? 'border-red-500' : ''}`}

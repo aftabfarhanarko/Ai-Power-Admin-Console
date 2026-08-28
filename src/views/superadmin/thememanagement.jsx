@@ -139,16 +139,16 @@ const ThemeManagementPage = () => {
           <span className="text-[10px] font-bold tracking-[0.1em] text-[#3525cd] uppercase block mb-1">
             Enterprise Deployment
           </span>
-          <h2 className="text-[32px] md:text-[48px] font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-[-0.02em] text-[#1b1b24] leading-tight">
             Aether Design Systems
           </h2>
-          <p className="text-[16px] text-[#777587] mt-2 max-w-2xl font-normal leading-relaxed">
+          <p className="text-sm text-[#777587] mt-1 max-w-2xl font-normal leading-relaxed">
             Synchronize and deploy branded storefront visual architectures across the global SquadCart fleet.
           </p>
         </div>
         <button
           onClick={() => navigate("/superadmin/themes/create")}
-          className="bg-[#3525cd] text-white px-6 py-3 rounded-2xl flex items-center gap-3 shadow-xl shadow-[#3525cd]/20 hover:scale-105 active:scale-95 transition-all w-fit font-semibold"
+          className="bg-[#3525cd] text-white px-6 py-3 rounded-2xl flex items-center gap-3 shadow-xl shadow-[#3525cd]/20 hover:scale-105 active:scale-95 transition-all w-fit font-semibold text-xs"
         >
           <MaterialIcon filled>add_circle</MaterialIcon>
           <span>Deploy New Fleet</span>
@@ -168,7 +168,7 @@ const ThemeManagementPage = () => {
             </span>
           </div>
           <p className="text-[#777587] text-[12px] font-semibold tracking-[0.05em] uppercase mb-1">Live Themes</p>
-          <h3 className="text-[32px] font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{themes.length}</h3>
+          <h3 className="text-2xl font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{themes.length}</h3>
           <svg className="w-full h-10 stroke-[#3525cd] stroke-2 fill-none" viewBox="0 0 100 40">
             <path d="M0 35 Q 25 35 40 10 T 70 25 T 100 5" strokeLinecap="round" />
           </svg>
@@ -183,7 +183,7 @@ const ThemeManagementPage = () => {
             <span className="px-2 py-1 bg-[#3525cd]/10 text-[#3525cd] text-[10px] font-bold rounded-full">SYNCED</span>
           </div>
           <p className="text-[#777587] text-[12px] font-semibold tracking-[0.05em] uppercase mb-1">Active Domains</p>
-          <h3 className="text-[32px] font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{activeDomainsCount.toLocaleString()}</h3>
+          <h3 className="text-2xl font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{activeDomainsCount.toLocaleString()}</h3>
           <svg className="w-full h-10 stroke-[#006780] stroke-2 fill-none" viewBox="0 0 100 40">
             <path d="M0 25 Q 10 10 30 20 T 60 15 T 100 30" strokeLinecap="round" />
           </svg>
@@ -198,7 +198,7 @@ const ThemeManagementPage = () => {
             <span className="px-2 py-1 bg-[#c7c4d8] text-[#777587] text-[10px] font-bold rounded-full uppercase">Identified</span>
           </div>
           <p className="text-[#777587] text-[12px] font-semibold tracking-[0.05em] uppercase mb-1">Branded (Logo)</p>
-          <h3 className="text-[32px] font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{brandedCountPercentage}</h3>
+          <h3 className="text-2xl font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{brandedCountPercentage}</h3>
           <svg className="w-full h-10 stroke-[#6b00b8] stroke-2 fill-none" viewBox="0 0 100 40">
             <path d="M0 30 Q 30 10 50 35 T 100 10" strokeLinecap="round" />
           </svg>
@@ -213,7 +213,7 @@ const ThemeManagementPage = () => {
             <span className="px-2 py-1 bg-[#10b981]/10 text-[#10b981] text-[10px] font-bold rounded-full uppercase">Validated</span>
           </div>
           <p className="text-[#777587] text-[12px] font-semibold tracking-[0.05em] uppercase mb-1">Fully Styled</p>
-          <h3 className="text-[32px] font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{fullyStyledCount}</h3>
+          <h3 className="text-2xl font-semibold tracking-[-0.01em] text-[#1b1b24] mb-4">{fullyStyledCount}</h3>
           <svg className="w-full h-10 stroke-[#10b981] stroke-2 fill-none" viewBox="0 0 100 40">
             <path d="M0 20 Q 20 20 40 5 T 60 30 T 100 15" strokeLinecap="round" />
           </svg>

@@ -210,10 +210,10 @@ const PackageCreatePage = () => {
 
             {/* Title Section */}
             <div>
-                <h2 className="text-[48px] font-bold tracking-tight text-[#1b1b24] leading-tight mb-2">
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#1b1b24] leading-tight mb-2">
                     Initialize New Deployment Package
                 </h2>
-                <p className="text-base text-[#777587] max-w-2xl leading-relaxed">
+                <p className="text-sm text-[#777587] max-w-2xl leading-relaxed">
                     Define the strategic parameters, core capabilities, and resource allocation logic for the next high-performance operational container.
                 </p>
             </div>

@@ -8,9 +8,11 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff, Hexagon, Loader2 } from "lucide-react";
 
 // Hooks and function
-import { userLoggedIn } from "@/features/auth/authSlice";
+import { userLoggedIn, userDetailsFetched } from "@/features/auth/authSlice";
 import { superadminLoggedIn } from "@/features/superadminAuth/superadminAuthSlice";
 import { decodeJWT } from "@/utils/jwt-decoder";
+import { setAuthCookie } from "@/hooks/useCookie";
+import { setSessionToken } from "@/hooks/useToken";
 
 /**
  * Premium Login Page for SquadCart Console.
@@ -24,19 +26,18 @@ const LoginPage = () => {
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { isAuthenticated: isSuperAdminAuth } = useSelector((state) => state.superadminAuth);
-  const initialAuthSnapshot = useRef({
-    merchant: isAuthenticated,
-    superadmin: isSuperAdminAuth,
-  });
 
-  // Redirect if already logged in
+  // Auto-redirect ONLY if user landed on /login with existing active session when page loaded
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
-    // Only auto-redirect when the page opens with an already-authenticated session.
-    // Fresh login submits handle navigation directly inside `onSubmit`.
-    if (initialAuthSnapshot.current.merchant && isAuthenticated) {
-      navigate("/", { replace: true });
-    } else if (initialAuthSnapshot.current.superadmin && isSuperAdminAuth) {
-      navigate("/superadmin", { replace: true });
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      if (isAuthenticated) {
+        navigate("/", { replace: true });
+      } else if (isSuperAdminAuth) {
+        navigate("/superadmin", { replace: true });
+      }
     }
   }, [isAuthenticated, isSuperAdminAuth, navigate]);
 
@@ -136,8 +137,22 @@ const LoginPage = () => {
       }
 
       console.log("[LoginPage] Processing Merchant login...");
+      // Clear superadmin session/state if any old token exists to avoid state conflict
+      sessionStorage.removeItem("superadmin_accessToken");
+      sessionStorage.removeItem("superadmin_refreshToken");
+
+      // Save tokens first so token getter & API queries find it immediately
+      if (rememberMe) {
+        setAuthCookie({ accessToken, refreshToken });
+      } else {
+        setSessionToken(accessToken, refreshToken);
+      }
+
       // Update regular merchant auth state
-      dispatch(userLoggedIn({ accessToken, refreshToken, rememberMe }));
+      dispatch(userLoggedIn({ accessToken, refreshToken, rememberMe, user }));
+      if (user) {
+        dispatch(userDetailsFetched(user));
+      }
       toast.success(t("auth.loginSuccess") || "Successfully logged in!");
       
       // Navigate to merchant dashboard or previous location
@@ -203,6 +218,7 @@ const LoginPage = () => {
               <input
                 id="email"
                 type="email"
+                autoComplete="username email"
                 {...register("email", { required: true })}
                 placeholder="hi@squadcart.com"
                 className={`w-full px-3 py-2.5 rounded-lg text-sm border bg-white/[0.03] text-white placeholder-white/20 focus:outline-none focus:bg-white/[0.05] focus:border-[#7c5cff] focus:ring-4 focus:ring-[#7c5cff]/10 transition-all ${errors.email ? 'border-red-500/50' : 'border-white/[0.08]'}`}
@@ -224,6 +240,7 @@ const LoginPage = () => {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
                   {...register("password", { required: true })}
                   placeholder="••••••••"
                   className={`w-full px-3 py-2.5 rounded-lg text-sm border bg-white/[0.03] text-white placeholder-white/20 focus:outline-none focus:bg-white/[0.05] focus:border-[#7c5cff] focus:ring-4 focus:ring-[#7c5cff]/10 transition-all ${errors.password ? 'border-red-500/50' : 'border-white/[0.08]'}`}
@@ -304,14 +321,14 @@ const LoginPage = () => {
           {/* Glassmorphic Cards Container */}
           <div className="relative w-[300px] h-[320px] mx-auto mt-10">
             {/* Background glow orb behind mockups */}
-            <div className="absolute -inset-10 bg-[radial-gradient(circle_at_center,rgba(124,92,255,0.12),transparent_70%)] blur-2xl pointer-events-none" />
+            <div className="absolute -inset-10 bg-[radial-gradient(circle_at_center,rgba(124,92,255,0.12),transparent_70%)] pointer-events-none" />
 
             {/* Dot navigation bar on the left */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="absolute left-0 top-6 w-[48px] h-[190px] bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/10 flex flex-col items-center justify-between py-4 shadow-lg z-10"
+              className="absolute left-0 top-6 w-[48px] h-[190px] bg-[#111424] rounded-2xl border border-white/10 flex flex-col items-center justify-between py-4 shadow-lg z-10 will-change-transform"
             >
               <div className="w-7 h-7 rounded-lg bg-[#7c5cff] flex items-center justify-center shadow-[0_0_8px_rgba(124,92,255,0.4)] transform -rotate-12">
                 <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
@@ -331,7 +348,7 @@ const LoginPage = () => {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="absolute right-0 top-0 w-[230px] h-[280px] bg-[#0d0f1c]/80 backdrop-blur-xl rounded-2xl p-5 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.4)] z-20 flex flex-col justify-between"
+              className="absolute right-0 top-0 w-[230px] h-[280px] bg-[#0d0f1c] rounded-2xl p-5 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.4)] z-20 flex flex-col justify-between will-change-transform"
             >
               <div className="flex justify-between items-start">
                 <Hexagon size={22} className="text-[#7c5cff] rotate-12" strokeWidth={1.5} />

@@ -75,10 +75,10 @@ const SuperAdminSuperadminsPage = () => {
             <span className="text-[#777587]">/</span>
             <span className="text-[12px] font-semibold tracking-[0.05em] text-[#464555] uppercase font-mono">Super Admin Management</span>
           </div>
-          <h1 className="text-[32px] md:text-[48px] font-extrabold tracking-[-0.02em] text-[#1b1b24] leading-tight">
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-[-0.02em] text-[#1b1b24] leading-tight">
             Super Admins
           </h1>
-          <p className="text-[14px] text-[#777587] mt-1">
+          <p className="text-sm text-[#777587] mt-1">
             Configure global access controls and manage root-level administrator identities.
           </p>
         </div>
@@ -111,7 +111,7 @@ const SuperAdminSuperadminsPage = () => {
           </div>
           <div>
             <p className="text-[12px] font-semibold text-[#777587] mb-1">Total Super Admins</p>
-            <h3 className="text-[32px] font-bold text-[#1b1b24]">{superadmins.length}</h3>
+            <h3 className="text-2xl font-bold text-[#1b1b24]">{superadmins.length}</h3>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ const SuperAdminSuperadminsPage = () => {
           </div>
           <div>
             <p className="text-[12px] font-semibold text-[#777587] mb-1">Active Now</p>
-            <h3 className="text-[32px] font-bold text-[#1b1b24]">
+            <h3 className="text-2xl font-bold text-[#1b1b24]">
               {superadmins.filter((a) => a.isActive).length}
             </h3>
           </div>
@@ -139,7 +139,7 @@ const SuperAdminSuperadminsPage = () => {
           </div>
           <div>
             <p className="text-[12px] font-semibold text-[#777587] mb-1">Last Security Audit</p>
-            <h3 className="text-[32px] font-bold text-[#1b1b24]">2d Ago</h3>
+            <h3 className="text-2xl font-bold text-[#1b1b24]">2d Ago</h3>
           </div>
         </div>
 
@@ -153,7 +153,7 @@ const SuperAdminSuperadminsPage = () => {
           </div>
           <div>
             <p className="text-[12px] font-semibold text-[#777587] mb-1">Pending Actions</p>
-            <h3 className="text-[32px] font-bold text-[#1b1b24]">3</h3>
+            <h3 className="text-2xl font-bold text-[#1b1b24]">3</h3>
           </div>
         </div>
       </section>
