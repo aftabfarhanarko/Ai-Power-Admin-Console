@@ -9,7 +9,7 @@ const useAuth = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [authChecked, setAuthChecked] = useState(false);
 
-  const { data, isSuccess, isLoading, isError, refetch } = useGetCurrentUserQuery(
+  const { data, isSuccess, isLoading, isError, error, refetch } = useGetCurrentUserQuery(
     undefined,
     {
       skip: !isAuthenticated,
@@ -38,12 +38,13 @@ const useAuth = () => {
       } else {
         document.title = `${companyName} - ${APP_TITLE}`;
       }
-    } else if (isError) {
+    } else if (isError && error?.status === 401) {
       dispatch(userLoggedOut());
     }
   }, [
     isSuccess,
     isError,
+    error,
     data,
     dispatch,
     isAuthenticated,

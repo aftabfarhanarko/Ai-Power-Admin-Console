@@ -3,7 +3,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 
-const PageComponent = dynamic(() => import('@/pages/superadmin/earnings'), { ssr: false });
+const PageComponent = dynamic(() => import('@/views/superadmin/earnings'), { ssr: false });
 
 export default function Page() {
   return <PageComponent />;

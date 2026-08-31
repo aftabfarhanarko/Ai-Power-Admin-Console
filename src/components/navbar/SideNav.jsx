@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
 import { useTranslation } from "react-i18next";
 import { navSections } from "./data";
 import { hasPermission } from "@/constants/feature-permission";
@@ -11,34 +10,23 @@ import { useGetCurrentUserQuery } from "@/features/auth/authApiSlice";
 import {
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
   LayoutDashboard,
+  LifeBuoy,
+  ArrowRight
 } from "lucide-react";
-
-// Custom Bag Icon Component
-const BagIcon = (props) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="20"
-    height="20"
-    fill="currentColor"
-    {...props}
-  >
-    <path d="M16 6a4 4 0 10-8 0H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3zm-6 0a2 2 0 114 0H10z"></path>
-  </svg>
-);
 
 /**
  * Filter navigation items based on user permissions.
- * Employee: only items with explicit permission; show parent if any child has permission.
  */
 const getFilteredNav = (user) => {
   if (!user) return [];
   return navSections
     .map((section) => {
-      // Handle direct link sections (like Global Navlinks)
+      // Direct link section
       if (section.link) {
         if (hasPermission(user, section.permission)) {
           return section;
@@ -66,9 +54,14 @@ const getFilteredNav = (user) => {
             to: item.link,
             icon: item.icon,
             badge: item.title === "Review" ? "02" : undefined,
-            children: item?.children?.filter((child) =>
-              hasPermission(user, child.permission),
-            ),
+            children: item?.children
+              ?.filter((child) => hasPermission(user, child.permission))
+              ?.map((child) => ({
+                label: child.title,
+                tKey: child.tKey,
+                to: child.link,
+                icon: child.icon,
+              })),
           }))
           .filter((item) =>
             item.children?.length ? item.children.length > 0 : true,
@@ -79,46 +72,133 @@ const getFilteredNav = (user) => {
 };
 
 /**
- * Collapsible Section Component
- * Renders a top-level Accordion Item (e.g. "Orders", "Inventory")
+ * Single Tree Item Component with L-Curved Branch Line
+ */
+function TreeItem({ item, isLast, t }) {
+  const location = useLocation();
+  const [isChildOpen, setIsChildOpen] = useState(false);
+  const hasChildren = item.children && item.children.length > 0;
+
+  const isActive = item.to?.includes("?")
+    ? item.to === location.pathname + location.search
+    : item.to && location.pathname.startsWith(item.to);
+
+  // Auto expand child sub-menu if active child inside
+  useEffect(() => {
+    if (hasChildren) {
+      const isAnyChildActive = item.children.some((child) =>
+        child.to?.includes("?")
+          ? child.to === location.pathname + location.search
+          : child.to && location.pathname.startsWith(child.to)
+      );
+      if (isAnyChildActive) setIsChildOpen(true);
+    }
+  }, [location.pathname, location.search, hasChildren, item.children]);
+
+  const Icon = item.icon;
+
+  return (
+    <div className="relative pl-6 py-0.5">
+      {/* Tree Branch L-Line Connector */}
+      <div className="absolute left-[-6px] top-0 bottom-0 pointer-events-none">
+        {/* Vertical Trunk Line */}
+        <div className={`absolute left-0 top-0 ${isLast ? 'h-[18px]' : 'h-full'} w-px bg-slate-200 dark:bg-slate-800`} />
+        {/* Curved L-Branch */}
+        <div className={`w-3.5 h-[14px] border-l border-b ${isActive ? 'border-purple-600 dark:border-purple-400' : 'border-slate-200 dark:border-slate-800'} rounded-bl-lg -mt-1`} />
+      </div>
+
+      {hasChildren ? (
+        <div>
+          <div
+            onClick={() => setIsChildOpen(!isChildOpen)}
+            className="flex items-center justify-between px-3 py-2 rounded-xl cursor-pointer text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100/60 dark:hover:bg-slate-800/40 select-none"
+          >
+            <div className="flex items-center gap-2.5">
+              {Icon && <Icon className="w-4 h-4 shrink-0 text-slate-500 dark:text-slate-400" strokeWidth={1.8} />}
+              <span className="truncate">{item.tKey ? t(item.tKey) : item.label}</span>
+            </div>
+            <ChevronRight
+              size={14}
+              className={`text-slate-400 transition-transform duration-200 ${isChildOpen ? "rotate-90 text-purple-600" : ""}`}
+            />
+          </div>
+
+          {/* Sub-children Tree */}
+          {isChildOpen && (
+            <div className="pl-5 relative mt-1">
+              {item.children.map((subChild, subIdx) => (
+                <TreeItem
+                  key={subIdx}
+                  item={subChild}
+                  isLast={subIdx === item.children.length - 1}
+                  t={t}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <NavLink
+          to={item.to || "#"}
+          className={({ isActive: linkActive }) => {
+            const active = item.to?.includes("?")
+              ? item.to === location.pathname + location.search
+              : linkActive;
+
+            return `flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+              active
+                ? "bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 font-extrabold shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
+            }`;
+          }}
+        >
+          {Icon && <Icon className="w-4 h-4 shrink-0 text-slate-500 dark:text-slate-400" strokeWidth={1.8} />}
+          <span className="truncate">{item.tKey ? t(item.tKey) : item.label}</span>
+          {item.badge && (
+            <span className="ml-auto text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300">
+              {item.badge}
+            </span>
+          )}
+        </NavLink>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Collapsible Accordion Section Component
  */
 function CollapsibleSection({ section, isCollapsed, t }) {
-  const [isOpen, setIsOpen] = useState(false); // Default closed to match accordion style usually
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const Icon = section.icon;
 
-  // Auto-expand if any child is active
+  // Auto-expand if child is active
   useEffect(() => {
     const isChildActive = section.items.some((item) => {
       if (item.children) {
         return item.children.some((child) => {
-          if (child.link.includes("?")) {
-            return child.link === location.pathname + location.search;
+          if (child.to?.includes("?")) {
+            return child.to === location.pathname + location.search;
           }
-          return location.pathname.startsWith(child.link);
+          return child.to && location.pathname.startsWith(child.to);
         });
       }
-      if (item.to.includes("?")) {
+      if (item.to?.includes("?")) {
         return item.to === location.pathname + location.search;
       }
-      return location.pathname.startsWith(item.to);
+      return item.to && location.pathname.startsWith(item.to);
     });
     if (isChildActive) setIsOpen(true);
   }, [location.pathname, location.search, section.items]);
 
-  const toggleSection = () => {
-    setIsOpen(!isOpen);
-  };
-
   if (isCollapsed) {
-    // Simplified view for collapsed state
     return (
       <div className="mb-2 px-2 flex justify-center group relative">
-        <button className="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
-          {Icon && <Icon size={20} strokeWidth={1.5} />}
+        <button className="p-2.5 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-500/10 text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+          {Icon && <Icon size={20} strokeWidth={1.8} />}
         </button>
-        {/* Tooltip on hover */}
-        <div className="absolute left-full top-2 ml-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity">
+        <div className="absolute left-full top-2 ml-2 bg-slate-900 text-white text-xs px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity font-bold shadow-lg">
           {section.tKey ? t(section.tKey) : section.title}
         </div>
       </div>
@@ -126,193 +206,55 @@ function CollapsibleSection({ section, isCollapsed, t }) {
   }
 
   return (
-    <div className="mb-1 px-4">
-      {/* Section Header (Accordion Toggle) */}
+    <div className="mb-1 px-3">
+      {/* Section Accordion Header */}
       <div
-        onClick={toggleSection}
-        className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer select-none transition-all duration-200
-          ${
-            isOpen
-              ? "text-black dark:text-white font-semibold"
-              : "text-gray-600 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white"
-          }`}
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer select-none transition-all duration-200 group ${
+          isOpen
+            ? "text-slate-900 dark:text-white font-extrabold"
+            : "text-slate-700 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/40"
+        }`}
       >
         <div className="flex items-center gap-3">
           {Icon && (
             <Icon
-              size={20}
-              strokeWidth={1.5}
-              className={isOpen ? "text-[#8B5CF6]" : ""}
+              size={19}
+              strokeWidth={1.8}
+              className={isOpen ? "text-purple-600 dark:text-purple-400" : "text-slate-600 dark:text-slate-400"}
             />
           )}
-          {/* Side Bar Text And COlor Size Set  */}
-          <span className="text-[15px] tracking-wide font-medium capitalize">
-            {(section.tKey ? t(section.tKey) : section.title).toLowerCase()}
+          <span className="text-[13px] tracking-tight font-black text-slate-900 dark:text-slate-100">
+            {section.tKey ? t(section.tKey) : section.title}
           </span>
         </div>
-        {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+        <ChevronDown
+          size={16}
+          className={`text-slate-400 transition-transform duration-200 ${
+            isOpen ? "rotate-180 text-purple-600 dark:text-purple-400" : ""
+          }`}
+        />
       </div>
 
-      {/* Items List (Tree Structure) */}
-      <div
-        className={`grid transition-all duration-300 ease-in-out ${
-          isOpen
-            ? "grid-rows-[1fr] opacity-100 mt-1"
-            : "grid-rows-[0fr] opacity-0"
-        }`}
-      >
-        <div className="overflow-hidden">
-          <div className="flex flex-col gap-1 pl-4 relative">
-            {/* Vertical Tree Line */}
-            <div className="absolute left-[29px] top-0 bottom-4 w-px bg-gray-200 dark:bg-gray-800" />
-
-            {section.items.map((item, index) => (
-              <Item
-                key={index}
-                item={item}
-                isLast={index === section.items.length - 1}
-                t={t}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Navigation Item Component
- * Renders individual links or nested sub-menus
- */
-function Item({ item, isLast, t }) {
-  const location = useLocation();
-  const isActive = item.to.includes("?")
-    ? item.to === location.pathname + location.search
-    : location.pathname.startsWith(item.to);
-  const hasChildren = item.children && item.children.length > 0;
-
-  // State for collapsible submenu
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Auto-expand if child is active
-  useEffect(() => {
-    if (hasChildren) {
-      const isChildActive = item.children.some((child) => {
-        if (child.link.includes("?")) {
-          return child.link === location.pathname + location.search;
-        }
-        return location.pathname.startsWith(child.link);
-      });
-      if (isChildActive) setIsOpen(true);
-    }
-  }, [location.pathname, location.search, hasChildren, item.children]);
-
-  // Render Branch Connector
-  const Branch = () => (
-    <div className="absolute left-[-11px] top-1/2 -translate-y-1/2 w-3 h-px bg-gray-200 dark:bg-gray-800">
-      {/* Curve corner effect could go here if we wanted exact curve matching, but straight lines are cleaner for dynamic lists */}
-      <div
-        className={`absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full ${isActive ? "bg-[#8B5CF6]" : "bg-gray-200 dark:bg-gray-800"} hidden`}
-      />
-    </div>
-  );
-
-  if (hasChildren) {
-    // If item has children (e.g. Invoices -> List, Recurring), render as collapsible sub-menu
-    return (
-      <div className="relative pl-10 py-1">
-        <Branch />
-        <div
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-between cursor-pointer group pr-2 mb-1 select-none"
-        >
-          <div className="flex items-center gap-3">
-            {item.icon && <item.icon size={16} strokeWidth={1.5} />}
-            <span
-              className={`text-[13px] font-medium transition-colors ${
-                isOpen
-                  ? "text-black dark:text-white"
-                  : "text-black dark:text-white"
-              }`}
-            >
-              {item.label}
-            </span>
-          </div>
-          <ChevronRight
-            size={14}
-            className={`text-gray-400 transition-transform duration-200 ${
-              isOpen ? "rotate-90" : ""
-            }`}
-          />
-        </div>
-
-        <div
-          className={`flex flex-col gap-1 border-l border-gray-200 dark:border-gray-800 pl-3 ml-1 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
-        >
-          {item.children.map((child, idx) => (
-            <NavLink
-              key={idx}
-              to={child.link}
-              className={({ isActive }) => {
-                // Custom active check for query params
-                const isExactActive = child.link.includes("?")
-                  ? child.link === location.pathname + location.search
-                  : isActive;
-
-                return `flex items-center gap-2 text-[13px] py-1.5 px-2 rounded-lg transition-colors relative font-medium
-                ${
-                  isExactActive
-                    ? "text-[#8B5CF6] bg-[#8B5CF6]/5"
-                    : "text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
-                }`;
-              }}
-            >
-              {child.icon && <child.icon size={16} strokeWidth={1.5} />}
-              <span>{child.title}</span>
-            </NavLink>
+      {/* Tree Line Connector Container */}
+      {isOpen && (
+        <div className="pl-6 relative mt-1 mb-2">
+          {section.items.map((item, index) => (
+            <TreeItem
+              key={index}
+              item={item}
+              isLast={index === section.items.length - 1}
+              t={t}
+            />
           ))}
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative pl-10 pr-2">
-      <Branch />
-      <NavLink
-        to={item.to}
-        end
-        className={({ isActive }) => {
-          const isExactActive = item.to.includes("?")
-            ? item.to === location.pathname + location.search
-            : isActive;
-
-          return `flex items-center gap-3 py-2 px-3 rounded-lg transition-all duration-200 font-medium
-           ${
-             isExactActive
-               ? "bg-white dark:bg-white/5 text-[#8B5CF6] shadow-sm border border-gray-100 dark:border-gray-800"
-               : "text-black dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
-           }`;
-        }}
-      >
-        {item.icon && <item.icon size={16} strokeWidth={1.5} />}
-        <span className="text-[13px] truncate">
-          {item.tKey ? t(item.tKey) : item.label}
-        </span>
-        {item.badge && (
-          <span className="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-            {item.badge}
-          </span>
-        )}
-      </NavLink>
+      )}
     </div>
   );
 }
 
 /**
- * SideNav Component
- * Main sidebar navigation component
+ * SideNav Main Component
  */
 export default function SideNav({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   const { t } = useTranslation();
@@ -321,7 +263,6 @@ export default function SideNav({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Fetch user data
   const { data: user } = useGetCurrentUserQuery();
 
   const handleLogout = () => {
@@ -329,10 +270,7 @@ export default function SideNav({ isMobileMenuOpen, setIsMobileMenuOpen }) {
     navigate("/login");
   };
 
-  // Pre-fetch categories
   useGetCategoriesQuery();
-
-  // Get filtered navigation based on permissions
   const nav = useMemo(() => getFilteredNav(user), [user]);
 
   const toggleSidebar = () => {
@@ -344,7 +282,7 @@ export default function SideNav({ isMobileMenuOpen, setIsMobileMenuOpen }) {
       {/* Mobile Backdrop */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 z-[90] bg-slate-950/60 backdrop-blur-sm lg:hidden transition-opacity duration-300"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -352,141 +290,111 @@ export default function SideNav({ isMobileMenuOpen, setIsMobileMenuOpen }) {
       {/* Sidebar Container */}
       <aside
         className={`fixed inset-y-0 left-0 z-[100] lg:sticky lg:top-0 h-screen 
-        ${isCollapsed ? "w-[80px]" : "w-[280px]"} 
+        ${isCollapsed ? "w-[80px]" : "w-[270px]"} 
         ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"} 
-        bg-white dark:bg-black/95 backdrop-blur-2xl
-        border-r border-gray-100 dark:border-white/5
-        flex flex-col transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] shadow-xl lg:shadow-none`}
+        bg-white dark:bg-[#0c0f17] 
+        border-r border-slate-200/80 dark:border-slate-800/80
+        flex flex-col transition-all duration-300 ease-in-out shadow-xl lg:shadow-none font-sans`}
       >
-        {/* Brand Header */}
-        <div
-          className={`px-6 pt-8 pb-2 flex items-center gap-3 ${isCollapsed ? "justify-center px-2" : ""}`}
-        >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 shrink-0">
+        {/* Top Brand Header */}
+        <div className={`p-4 sm:p-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/50 ${isCollapsed ? "justify-center" : ""}`}>
+          <div className="flex items-center gap-3 min-w-0">
             {user?.companyLogo ? (
               <img
                 src={user.companyLogo}
-                className="w-full h-full object-cover rounded-xl"
+                className="w-9 h-9 object-cover rounded-xl shadow-md shrink-0"
                 alt="Logo"
               />
             ) : (
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                />
-              </svg>
+              <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black shadow-md shadow-purple-500/30 shrink-0">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L15 7H9L12 2ZM4 9H20V12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12V9Z" />
+                </svg>
+              </div>
+            )}
+            {!isCollapsed && (
+              <div className="flex flex-col min-w-0">
+                <span className="font-black text-base leading-tight text-purple-700 dark:text-purple-400 tracking-tight truncate">
+                  SquadCart
+                </span>
+                <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest truncate">
+                  {user?.storeName || "SMART SYSTEM"}
+                </span>
+              </div>
             )}
           </div>
+
           {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="font-bold text-lg leading-tight text-gray-900 dark:text-white tracking-tight">
-                SquadCart
-              </span>
-              <span className="text-[10px] font-medium text-gray-500 uppercase tracking-widest">
-                {user?.storeName || "My Store"}
-              </span>
-            </div>
+            <button
+              onClick={toggleSidebar}
+              className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors shrink-0"
+            >
+              <ChevronLeft size={18} />
+            </button>
           )}
         </div>
 
-        {/* Dashboard Link */}
-        <div className="px-4 pt-4 pb-2">
+        {/* Dashboard Active Pill Button */}
+        <div className="p-3">
           {isCollapsed ? (
-            <div className="flex justify-center mb-2">
-              <Link
-                to="/"
-                className={`p-3 rounded-xl transition-all duration-300 ${
-                  location.pathname === "/"
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-indigo-500/30"
-                    : "text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-white/5"
-                }`}
-              >
-                <LayoutDashboard size={24} strokeWidth={1.5} />
-              </Link>
-            </div>
+            <Link
+              to="/"
+              className={`p-3 rounded-xl flex items-center justify-center transition-all ${
+                location.pathname === "/"
+                  ? "bg-purple-600 text-white shadow-lg shadow-purple-500/25"
+                  : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+              }`}
+            >
+              <LayoutDashboard size={20} strokeWidth={1.8} />
+            </Link>
           ) : (
             <Link
               to="/"
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-sm transition-all duration-300 ${
                 location.pathname === "/"
-                  ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/30 ring-1 ring-white/20"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-white/5 hover:text-indigo-600 dark:hover:text-white"
+                  ? "bg-purple-600 text-white shadow-md shadow-purple-500/25"
+                  : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
               }`}
             >
-              {location.pathname === "/" && (
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              )}
-              <LayoutDashboard
-                size={22}
-                strokeWidth={1.5}
-                className={`relative z-10 ${
-                  location.pathname === "/" ? "text-white" : ""
-                }`}
-              />
-              <span className="font-bold text-[15px] tracking-wide relative z-10">
-                {t("nav.dashboard")}
-              </span>
+              <LayoutDashboard size={19} strokeWidth={2} />
+              <span className="tracking-wide">{t("nav.dashboard") || "Dashboard"}</span>
             </Link>
           )}
         </div>
 
-        {/* Navigation Items - Scrollable Area */}
+        {/* Navigation Items Scrollable Area */}
         <div className="flex-1 overflow-y-auto custom-scrollbar py-2">
-          <nav className="flex flex-col gap-1">
+          <nav className="flex flex-col gap-0.5">
             {nav.map((section) =>
               section.link ? (
                 isCollapsed ? (
-                  <div
-                    key={section.id}
-                    className="mb-2 px-2 flex justify-center group relative"
-                  >
+                  <div key={section.id} className="mb-2 px-2 flex justify-center group relative">
                     <Link
                       to={section.link}
-                      className={`p-2 rounded-xl transition-colors ${
+                      className={`p-2.5 rounded-xl transition-colors ${
                         location.pathname === section.link
-                          ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/30"
-                          : "hover:bg-black/5 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                          ? "bg-purple-600 text-white shadow-md"
+                          : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400"
                       }`}
                     >
-                      {section.icon && (
-                        <section.icon size={20} strokeWidth={1.5} />
-                      )}
+                      {section.icon && <section.icon size={20} strokeWidth={1.8} />}
                     </Link>
-                    <div className="absolute left-full top-2 ml-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity">
+                    <div className="absolute left-full top-2 ml-2 bg-slate-900 text-white text-xs px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity font-bold">
                       {section.tKey ? t(section.tKey) : section.title}
                     </div>
                   </div>
                 ) : (
-                  <div key={section.id} className="px-4 mb-1">
+                  <div key={section.id} className="px-3 mb-1">
                     <Link
                       to={section.link}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-black transition-all ${
                         location.pathname === section.link
-                          ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-indigo-500/30 ring-1 ring-white/20"
-                          : "text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-white/5 hover:text-indigo-600 dark:hover:text-white"
+                          ? "bg-purple-600 text-white shadow-md shadow-purple-500/20"
+                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/40"
                       }`}
                     >
-                      {location.pathname === section.link && (
-                        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      )}
-                      {section.icon && (
-                        <section.icon
-                          size={22}
-                          strokeWidth={1.5}
-                          className={`relative z-10 ${location.pathname === section.link ? "text-white" : ""}`}
-                        />
-                      )}
-                      <span className="font-medium text-[15px] tracking-wide relative z-10">
-                        {section.tKey ? t(section.tKey) : section.title}
-                      </span>
+                      {section.icon && <section.icon size={19} strokeWidth={1.8} />}
+                      <span className="tracking-tight">{section.tKey ? t(section.tKey) : section.title}</span>
                     </Link>
                   </div>
                 )
@@ -502,45 +410,46 @@ export default function SideNav({ isMobileMenuOpen, setIsMobileMenuOpen }) {
           </nav>
         </div>
 
-        {/* Footer Actions */}
-        <div className="p-4 space-y-1 mt-auto pb-6">
-          <button
-            onClick={toggleSidebar}
-            className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-200 group ${
-              isCollapsed ? "justify-center" : ""
-            }`}
-          >
-            {isCollapsed ? (
-              <PanelLeftOpen size={20} />
-            ) : (
-              <PanelLeftClose
-                size={20}
-                className="group-hover:scale-110 transition-transform"
-              />
-            )}
-            {!isCollapsed && (
-              <span className="text-[13px] font-medium">
-                {t("common.collapseSidebar")}
-              </span>
-            )}
-          </button>
+        {/* Bottom Help Center Card Widget */}
+        {!isCollapsed && (
+          <div className="px-4 py-2 mt-auto">
+            <Link 
+              to="/help"
+              className="bg-slate-50/90 dark:bg-[#121722] border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-3.5 flex items-center gap-3 hover:shadow-md transition-all duration-300 group cursor-pointer"
+            >
+              <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <LifeBuoy className="w-5 h-5 animate-pulse" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-black text-slate-900 dark:text-white tracking-tight">Need help?</span>
+                <span className="text-[11px] font-extrabold text-purple-600 dark:text-purple-400 flex items-center gap-1 group-hover:underline">
+                  Go to Help Center <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </Link>
+          </div>
+        )}
 
+        {/* Footer Actions */}
+        <div className="p-3 border-t border-slate-100 dark:border-slate-800/50 flex items-center justify-between">
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-200 group ${
+            className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 font-bold text-xs transition-all ${
               isCollapsed ? "justify-center" : ""
             }`}
           >
-            <LogOut
-              size={20}
-              className="group-hover:translate-x-1 transition-transform"
-            />
-            {!isCollapsed && (
-              <span className="text-[13px] font-medium">
-                {t("common.logout")}
-              </span>
-            )}
+            <LogOut size={18} />
+            {!isCollapsed && <span>{t("common.logout")}</span>}
           </button>
+          
+          {isCollapsed && (
+            <button
+              onClick={toggleSidebar}
+              className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+            >
+              <ChevronRight size={18} />
+            </button>
+          )}
         </div>
       </aside>
     </>

@@ -55,7 +55,8 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
   // Note: Superadmin tokens don't have refresh logic yet, so we only retry for regular users
   while (
     !isSuperadmin && // Don't retry refresh for superadmin (no refresh endpoint yet)
-    (!accessToken || (result.error && result.error.status === 401)) &&
+    result.error &&
+    result.error.status === 401 &&
     retryCount < MAX_RETRY_COUNT
   ) {
     retryCount++;

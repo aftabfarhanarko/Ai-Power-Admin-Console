@@ -14,6 +14,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
           credentials: "include",
         };
       },
+      transformResponse: (response) => {
+        return response?.data || response;
+      },
       invalidatesTags: ["auth", "my-profile"],
     }),
 

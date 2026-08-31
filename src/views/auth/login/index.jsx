@@ -9,14 +9,12 @@ import { Eye, EyeOff, Hexagon, Loader2 } from "lucide-react";
 
 // Hooks and function
 import { userLoggedIn, userDetailsFetched } from "@/features/auth/authSlice";
-import { superadminLoggedIn } from "@/features/superadminAuth/superadminAuthSlice";
+import { superadminLoggedIn, superadminLoggedOut } from "@/features/superadminAuth/superadminAuthSlice";
+import { useUserLoginMutation } from "@/features/auth/authApiSlice";
 import { decodeJWT } from "@/utils/jwt-decoder";
-import { setAuthCookie } from "@/hooks/useCookie";
-import { setSessionToken } from "@/hooks/useToken";
 
 /**
  * Premium Login Page for SquadCart Console.
- * Migrated design from squadcart-frontend with full console logic integration.
  */
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -60,115 +58,59 @@ const LoginPage = () => {
     },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [userLogin, { isLoading }] = useUserLoginMutation();
 
   /**
-   * Handles the login submission.
+   * Handles the login submission cleanly.
    * @param {Object} data - Email and password from the form.
    */
   const onSubmit = async (data) => {
-    setIsLoading(true);
-
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          rememberMe,
-        }),
-      });
+      const response = await userLogin({
+        email: data.email,
+        password: data.password,
+        rememberMe,
+      }).unwrap();
 
-      const rawPayload = await response.text();
-      let responseData = {};
-
-      if (rawPayload) {
-        try {
-          responseData = JSON.parse(rawPayload);
-        } catch {
-          responseData = { message: rawPayload };
-        }
-      }
-
-      if (!response.ok) {
-        throw {
-          data: responseData,
-          message:
-            responseData?.message ||
-            response.statusText ||
-            "Login failed. Please check your credentials.",
-        };
-      }
-
-      // Backend returns { accessToken, refreshToken, user }
-      const accessToken = responseData?.accessToken || responseData?.data?.accessToken;
-      const refreshToken = responseData?.refreshToken || responseData?.data?.refreshToken;
-      const user = responseData?.user || responseData?.data?.user;
+      const accessToken = response?.accessToken || response?.data?.accessToken;
+      const refreshToken = response?.refreshToken || response?.data?.refreshToken;
+      const user = response?.user || response?.data?.user;
 
       if (!accessToken) {
         toast.error(t("auth.loginAccessTokenMissing") || "Access token missing.");
         return;
       }
 
-      // 🔍 Decode token to detect role for unified redirection
+      // Decode token to detect role for unified redirection (Super Admin vs Merchant)
       const { payload } = decodeJWT(accessToken);
-      console.log("[LoginPage] Decoded Payload:", payload);
-      
-      // Robust role detection: check payload first, then user object, case-insensitive
       const rawRole = payload?.role || user?.role || "";
-      console.log("[LoginPage] Detected Raw Role:", rawRole);
-      
-      const isSuperAdmin = typeof rawRole === 'string' && rawRole.toUpperCase() === "SUPER_ADMIN";
-      console.log("[LoginPage] Is Super Admin?", isSuperAdmin);
+      const isSuperAdmin = typeof rawRole === "string" && rawRole.toUpperCase() === "SUPER_ADMIN";
 
       if (isSuperAdmin) {
-        console.log("[LoginPage] Processing Super Admin login...");
-        // Update superadmin auth state
         dispatch(superadminLoggedIn({ accessToken, refreshToken, user }));
         toast.success(t("auth.superadminLoginSuccess") || "Welcome Super Admin!");
-        
-        // Ensure we go to the superadmin dashboard
-        console.log("[LoginPage] Navigating to /superadmin");
-        navigate("/superadmin", { replace: true });
+        window.location.href = "/superadmin";
         return;
       }
 
-      console.log("[LoginPage] Processing Merchant login...");
-      // Clear superadmin session/state if any old token exists to avoid state conflict
-      sessionStorage.removeItem("superadmin_accessToken");
-      sessionStorage.removeItem("superadmin_refreshToken");
-
-      // Save tokens first so token getter & API queries find it immediately
-      if (rememberMe) {
-        setAuthCookie({ accessToken, refreshToken });
-      } else {
-        setSessionToken(accessToken, refreshToken);
-      }
-
-      // Update regular merchant auth state
+      // Merchant login handling
+      dispatch(superadminLoggedOut());
       dispatch(userLoggedIn({ accessToken, refreshToken, rememberMe, user }));
       if (user) {
         dispatch(userDetailsFetched(user));
       }
       toast.success(t("auth.loginSuccess") || "Successfully logged in!");
-      
-      // Navigate to merchant dashboard or previous location
+
       const from = location.state?.from?.pathname || "/";
-      console.log("[LoginPage] Navigating to:", from);
-      navigate(from, { replace: true });
+      window.location.href = from;
     } catch (error) {
-      console.error("Login session error:", error);
+      console.error("Login error:", error);
       toast.error(
-        error?.data?.message || 
-        error?.message || 
-        t("auth.loginFailedTryAgain") || 
+        error?.data?.message ||
+        error?.message ||
+        t("auth.loginFailedTryAgain") ||
         "Login failed. Please check your credentials."
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 

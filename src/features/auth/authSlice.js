@@ -2,12 +2,8 @@ import { setAuthCookie } from "@/hooks/useCookie";
 import { clearTokens, getTokens, setSessionToken } from "@/hooks/useToken";
 import { createSlice } from "@reduxjs/toolkit";
 
-const { accessToken } = getTokens();
-
 const initialState = (() => {
-  // Only store authentication status and token
-  // User data will be fetched from API using /auth/me
-  if (!accessToken) {
+  if (typeof window === "undefined") {
     return {
       accessToken: null,
       user: null,
@@ -15,11 +11,28 @@ const initialState = (() => {
     };
   }
 
-  return {
-    accessToken,
-    user: null, // Will be fetched from API
-    isAuthenticated: true,
-  };
+  try {
+    const { accessToken } = getTokens();
+    if (!accessToken) {
+      return {
+        accessToken: null,
+        user: null,
+        isAuthenticated: false,
+      };
+    }
+
+    return {
+      accessToken,
+      user: null, // Will be fetched from API
+      isAuthenticated: true,
+    };
+  } catch (error) {
+    return {
+      accessToken: null,
+      user: null,
+      isAuthenticated: false,
+    };
+  }
 })();
 
 export const authSlice = createSlice({
