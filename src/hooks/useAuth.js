@@ -15,7 +15,7 @@ const useAuth = () => {
       skip: !isAuthenticated,
     }
   );
-
+// weuhriehhiherhiueriurwer
   useEffect(() => {
     if (!isAuthenticated) {
       setAuthChecked(true);
