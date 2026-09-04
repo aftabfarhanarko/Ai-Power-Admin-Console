@@ -54,11 +54,16 @@ export const authSlice = createSlice({
 
       if (action.payload.rememberMe) {
         try {
+          if (typeof window !== "undefined") {
+            sessionStorage.removeItem("accessToken");
+            sessionStorage.removeItem("refreshToken");
+          }
           setAuthCookie(action.payload);
         } catch (error) {
           console.error("Failed to set auth cookie:", error);
         }
       } else {
+        removeAuthCookie();
         setSessionToken(
           action.payload.accessToken,
           action.payload.refreshToken

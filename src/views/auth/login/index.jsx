@@ -101,7 +101,10 @@ const LoginPage = () => {
       }
       toast.success(t("auth.loginSuccess") || "Successfully logged in!");
 
-      const from = location.state?.from?.pathname || "/";
+      let from = location.state?.from?.pathname || location.state?.from || "/";
+      if (typeof from !== "string" || from.startsWith("/login") || from.startsWith("/superadmin/login")) {
+        from = "/";
+      }
       window.location.href = from;
     } catch (error) {
       console.error("Login error:", error);

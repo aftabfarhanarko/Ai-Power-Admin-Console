@@ -9,25 +9,34 @@ export const getTokens = () => {
       rememberMe: false,
     };
   }
-  const { accessToken: cookieAccessToken, refreshToken: cookieRefreshToken } =
-    getAuthCookie();
 
   const sessionAccessToken = sessionStorage.getItem("accessToken");
   const sessionRefreshToken = sessionStorage.getItem("refreshToken");
 
-  if (!!cookieRefreshToken) {
-    return {
-      accessToken: cookieAccessToken,
-      refreshToken: cookieRefreshToken,
-      rememberMe: true,
-    };
-  } else {
+  if (sessionAccessToken) {
     return {
       accessToken: sessionAccessToken,
       refreshToken: sessionRefreshToken,
       rememberMe: false,
     };
   }
+
+  const { accessToken: cookieAccessToken, refreshToken: cookieRefreshToken } =
+    getAuthCookie();
+
+  if (cookieAccessToken) {
+    return {
+      accessToken: cookieAccessToken,
+      refreshToken: cookieRefreshToken,
+      rememberMe: true,
+    };
+  }
+
+  return {
+    accessToken: null,
+    refreshToken: null,
+    rememberMe: false,
+  };
 };
 
 export const clearTokens = () => {
