@@ -18,21 +18,29 @@ const baseQuery = (args, api, extraOptions) => {
   
   return fetchBaseQuery({
     baseUrl: resolvedBaseUrl,
-    prepareHeaders: (headers) => {
-      // Check for superadmin token first (if superadmin is logged in)
-      const { accessToken: superadminToken } = getSuperadminTokens();
-      
-      if (superadminToken && typeof superadminToken === 'string' && superadminToken.length > 10) {
-        // Use superadmin token
-        headers.set("Authorization", `Bearer ${superadminToken}`);
-      } else {
-        // Fallback to regular user token
+    prepareHeaders: (headers, { getState }) => {
+      const state = getState();
+      const isSuperadmin = state?.superadminAuth?.isAuthenticated;
+      const isMerchant = state?.auth?.isAuthenticated;
+
+      let token = null;
+
+      if (isSuperadmin) {
+        const { accessToken } = getSuperadminTokens();
+        token = accessToken;
+      } else if (isMerchant) {
         const { accessToken } = getTokens();
-        if (accessToken) {
-          headers.set("Authorization", `Bearer ${accessToken}`);
-        }
+        token = accessToken;
+      } else {
+        const { accessToken: merchantToken } = getTokens();
+        const { accessToken: superadminToken } = getSuperadminTokens();
+        token = merchantToken || superadminToken;
       }
-      
+
+      if (token && typeof token === 'string' && token.length > 10) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+
       headers.set("Accept", "application/json");
       return headers;
     },

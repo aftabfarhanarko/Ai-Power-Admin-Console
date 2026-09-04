@@ -38,85 +38,85 @@ const TablePaginate = ({
   const isLastPage = currentPage === totalPages;
 
   return (
-    <div className={`flex items-center justify-between ${className || ""}`}>
+    <div className={`flex flex-col sm:flex-row items-center justify-between gap-3 ${className || ""}`}>
       {/* Left side: Items per page selector */}
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-black/70 dark:text-white/70">
+      <div className="flex items-center gap-3 text-xs">
+        <span className="text-slate-500 dark:text-slate-400 font-medium">
           {t("table.itemsPerPage")}
         </span>
         <select
           value={pageSize}
           onChange={handlePageSizeChange}
-          className="h-9 px-3 border border-black/20 dark:border-white/20 rounded-md bg-white dark:bg-[#1a1f26] text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 cursor-pointer"
+          className="h-8 px-2.5 glass-input text-xs font-semibold cursor-pointer"
         >
           <option value={10}>10</option>
           <option value={25}>25</option>
           <option value={50}>50</option>
           <option value={100}>100</option>
         </select>
-        <span className="text-sm text-black/70 dark:text-white/70">
+        <span className="text-slate-500 dark:text-slate-400 font-medium">
           {startItem}-{endItem} {t("table.of")} {total} {t("table.items")}
         </span>
       </div>
 
       {/* Right side: Page navigation */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         {/* First page button */}
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={() => handlePageChange(1)}
           disabled={isFirstPage}
-          className={`h-9 w-9 bg-black text-white ${isFirstPage ? "opacity-50 cursor-not-allowed" : "hover:bg-black/90"}`}
+          className="h-8 w-8 rounded-xl glass-input text-slate-700 dark:text-slate-200 disabled:opacity-40"
           title={t("table.firstPage")}
         >
-          <ChevronsLeft className="h-4 w-4" />
+          <ChevronsLeft className="h-3.5 w-3.5" />
         </Button>
 
         {/* Previous button */}
         <Button
-          variant="ghost"
-          size="default"
+          variant="outline"
+          size="sm"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={isFirstPage}
-          className={`h-9 px-3 gap-1 bg-black text-white ${isFirstPage ? "opacity-50 cursor-not-allowed" : "hover:bg-black/90"}`}
+          className="h-8 px-3 text-xs font-semibold rounded-xl glass-input text-slate-700 dark:text-slate-200 disabled:opacity-40"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-3.5 w-3.5 mr-1" />
           <span>{t("table.previous")}</span>
         </Button>
 
         {/* Current page indicator */}
-        <div className="flex items-center gap-2">
-          <div className="h-9 px-3 flex items-center justify-center border border-black/20 dark:border-white/20 rounded-md bg-white dark:bg-[#1a1f26] text-black dark:text-white text-sm font-medium min-w-[40px]">
+        <div className="flex items-center gap-1.5 px-2">
+          <div className="h-8 px-3 flex items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 text-xs font-bold min-w-[32px]">
             {currentPage}
           </div>
-          <span className="text-sm text-black/70 dark:text-white/70">
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
             {t("table.of")} {totalPages}
           </span>
         </div>
 
         {/* Next button */}
         <Button
-          variant="ghost"
-          size="default"
+          variant="outline"
+          size="sm"
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={isLastPage}
-          className={`h-9 px-3 gap-1 bg-black text-white ${isLastPage ? "opacity-50 cursor-not-allowed" : "hover:bg-black/90"}`}
+          className="h-8 px-3 text-xs font-semibold rounded-xl glass-input text-slate-700 dark:text-slate-200 disabled:opacity-40"
         >
           <span>{t("table.next")}</span>
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight className="h-3.5 w-3.5 ml-1" />
         </Button>
 
         {/* Last page button */}
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={() => handlePageChange(totalPages)}
           disabled={isLastPage}
-          className={`h-9 w-9 bg-black text-white ${isLastPage ? "opacity-50 cursor-not-allowed" : "hover:bg-black/90"}`}
+          className="h-8 w-8 rounded-xl glass-input text-slate-700 dark:text-slate-200 disabled:opacity-40"
           title={t("table.lastPage")}
         >
-          <ChevronsRight className="h-4 w-4" />
+          <ChevronsRight className="h-3.5 w-3.5" />
         </Button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { setAuthCookie } from "@/hooks/useCookie";
+import { setAuthCookie, removeAuthCookie } from "@/hooks/useCookie";
 import { clearTokens, getTokens, setSessionToken } from "@/hooks/useToken";
 import { createSlice } from "@reduxjs/toolkit";
 

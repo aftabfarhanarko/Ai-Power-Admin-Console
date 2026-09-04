@@ -110,7 +110,7 @@ const SuperAdminSideNav = ({ isMobileMenuOpen, setIsMobileMenuOpen, variant = "d
   const handleLogout = () => {
     dispatch(superadminLoggedOut());
     toast.success("Logged out");
-    navigate("/superadmin/login");
+    window.location.href = "/superadmin/login";
   };
 
   const closeMobileMenu = () => {

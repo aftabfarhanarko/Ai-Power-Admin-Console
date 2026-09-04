@@ -3,19 +3,7 @@ import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 /**
- * OrderStatCard Component
- * 
- * A premium stat card with a "Wave" design, featuring an icon, large value,
- * dynamic trend indicator, and a decorative wave graphic.
- * 
- * @param {string} title - Label of the stat
- * @param {string|number} value - Main stat value
- * @param {string} trend - Trend percentage string (e.g. "25.2%")
- * @param {string} trendDir - Direction of trend ('up' | 'down')
- * @param {Component} icon - Lucide icon component
- * @param {string} color - Text color class for icon/trend (e.g. "text-blue-600")
- * @param {string} bg - Background color class for icon/pill (e.g. "bg-blue-50")
- * @param {string} wave - Text color class for wave SVG (e.g. "text-blue-500")
+ * OrderStatCard Component - Premium Glassmorphism Stat Card
  */
 const OrderStatCard = ({ 
   title, 
@@ -33,58 +21,45 @@ const OrderStatCard = ({
   };
 
   return (
-    <motion.div variants={item} whileHover={{ y: -5, transition: { duration: 0.2 } }} className="h-full">
-      <Card className="border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 shadow-sm hover:shadow-xl transition-all duration-300 rounded-[24px] overflow-hidden relative group h-full">
-        <CardContent className="p-6 relative z-10 h-full flex flex-col justify-between">
-          <div className="flex items-start justify-between mb-4">
-            <div className={`p-3 rounded-2xl ${bg} ${color} group-hover:scale-110 transition-transform duration-300`}>
-              <Icon className="w-6 h-6" />
+    <motion.div variants={item} whileHover={{ y: -4, transition: { duration: 0.2 } }} className="h-full">
+      <div className="glass-card glass-card-hover relative overflow-hidden h-full p-5 lg:p-6 flex flex-col justify-between group">
+        {/* Subtle glow background */}
+        <div className="absolute -top-10 -right-10 w-24 h-24 bg-indigo-500/5 dark:bg-indigo-400/10 rounded-full blur-xl pointer-events-none" />
+
+        <div>
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <div className={`p-3 rounded-2xl border border-white/20 dark:border-white/10 ${bg} ${color} group-hover:scale-105 transition-transform duration-300 shadow-xs`}>
+              <Icon className="w-5 h-5" />
             </div>
-            <span className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[50%] text-right">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">
               {title}
             </span>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              {value}
-            </h3>
-
-            <div className="flex items-center gap-2">
-              <span
-                className={`
-                  inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full
-                  ${bg} ${color}
-                `}
-              >
-                {trendDir === "up" ? (
-                  <ArrowUpRight className="w-3 h-3" />
-                ) : (
-                  <ArrowDownRight className="w-3 h-3" />
-                )}
-                {trend}
-              </span>
-              <span className="text-xs text-slate-400 font-medium">
-                vs last month
-              </span>
-            </div>
-          </div>
-        </CardContent>
-
-        {/* Wave Graphic */}
-        <div
-          className={`absolute bottom-0 right-0 w-24 h-16 opacity-10 group-hover:opacity-20 transition-opacity duration-300 ${wave}`}
-        >
-          <svg
-            viewBox="0 0 100 60"
-            fill="currentColor"
-            preserveAspectRatio="none"
-            className="w-full h-full"
-          >
-            <path d="M0 60 C 20 60, 20 20, 50 20 C 80 20, 80 50, 100 50 L 100 60 Z" />
-          </svg>
+          <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 mb-3">
+            {value}
+          </h3>
         </div>
-      </Card>
+
+        <div className="flex items-center gap-2 pt-2 border-t border-slate-200/50 dark:border-white/5 text-xs">
+          <span
+            className={`
+              inline-flex items-center gap-1 font-bold px-2 py-0.5 rounded-full
+              ${trendDir === "up" ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10" : "text-rose-600 dark:text-rose-400 bg-rose-500/10"}
+            `}
+          >
+            {trendDir === "up" ? (
+              <ArrowUpRight className="w-3 h-3" />
+            ) : (
+              <ArrowDownRight className="w-3 h-3" />
+            )}
+            {trend}
+          </span>
+          <span className="text-slate-400 font-medium">
+            vs last month
+          </span>
+        </div>
+      </div>
     </motion.div>
   );
 };

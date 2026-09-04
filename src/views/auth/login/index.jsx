@@ -87,6 +87,7 @@ const LoginPage = () => {
       const isSuperAdmin = typeof rawRole === "string" && rawRole.toUpperCase() === "SUPER_ADMIN";
 
       if (isSuperAdmin) {
+        dispatch(userLoggedOut());
         dispatch(superadminLoggedIn({ accessToken, refreshToken, user }));
         toast.success(t("auth.superadminLoginSuccess") || "Welcome Super Admin!");
         window.location.href = "/superadmin";

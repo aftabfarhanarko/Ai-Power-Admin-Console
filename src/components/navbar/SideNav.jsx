@@ -267,7 +267,7 @@ export default function SideNav({ isMobileMenuOpen, setIsMobileMenuOpen }) {
 
   const handleLogout = () => {
     dispatch(userLoggedOut());
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   useGetCategoriesQuery();

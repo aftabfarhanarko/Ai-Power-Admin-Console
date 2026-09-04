@@ -116,7 +116,7 @@ const SuperAdminTopNavbar = ({ setIsMobileMenuOpen, variant = "dark" }) => {
   const handleLogout = () => {
     dispatch(superadminLoggedOut());
     toast.success("Logged out successfully");
-    navigate("/superadmin/login");
+    window.location.href = "/superadmin/login";
   };
 
   return (
